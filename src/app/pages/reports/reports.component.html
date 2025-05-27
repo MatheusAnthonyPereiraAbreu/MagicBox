@@ -1,0 +1,63 @@
+<div class="p-6">
+    <h2 class="text-2xl font-bold mb-6 text-deep-lilac">Geração de Relatórios</h2>
+
+    <!-- Seção de Filtros -->
+    <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+        <h3 class="text-lg font-semibold mb-4 text-dark-purple">Filtros</h3>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <!-- Filtro de Período -->
+            <div class="space-y-2">
+                <label class="block text-sm font-medium text-gray-700">Período</label>
+                <select class="w-full p-2 border rounded-md focus:ring-2 focus:ring-vibrant-purple">
+                    <option value="7">Últimos 7 dias</option>
+                    <option value="30">Último mês</option>
+                    <option value="90">Últimos 3 meses</option>
+                    <option value="365">Último ano</option>
+                </select>
+            </div>
+
+            <!-- Filtro de Gênero -->
+            <div class="space-y-2">
+                <label class="block text-sm font-medium text-gray-700">Gênero Musical</label>
+                <select class="w-full p-2 border rounded-md focus:ring-2 focus:ring-vibrant-purple">
+                    <option value="all">Todos</option>
+                    <option value="rock">Rock</option>
+                    <option value="pop">Pop</option>
+                    <option value="jazz">Jazz</option>
+                    <option value="classical">Clássico</option>
+                </select>
+            </div>
+
+            <!-- Filtro de Tipo de Relatório -->
+            <div class="space-y-2">
+                <label class="block text-sm font-medium text-gray-700">Tipo de Relatório</label>
+                <select class="w-full p-2 border rounded-md focus:ring-2 focus:ring-vibrant-purple">
+                    <option value="popularity">Popularidade</option>
+                    <option value="trends">Tendências</option>
+                    <option value="demographics">Demografia</option>
+                    <option value="complete">Relatório Completo</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Botões de Ação -->
+        <div class="mt-6 flex justify-end space-x-4">
+            <button class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors">
+                Limpar Filtros
+            </button>
+            <button class="px-4 py-2 bg-vibrant-purple text-white rounded-md hover:bg-deep-lilac transition-colors">
+                Gerar Relatório
+            </button>
+        </div>
+    </div>
+
+    <!-- Prévia do Relatório -->
+    <div class="bg-white rounded-lg shadow-lg p-6">
+        <h3 class="text-lg font-semibold mb-4 text-dark-purple">Prévia do Relatório</h3>
+
+        <div class="h-96 flex items-center justify-center bg-gray-100 rounded">
+            <p class="text-gray-500">Selecione os filtros acima para gerar um relatório</p>
+        </div>
+    </div>
+</div>

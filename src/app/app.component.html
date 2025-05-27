@@ -1,9 +1,9 @@
-<nav>
-    <a routerLink="/" 
-       routerLinkActive="active" 
-       [routerLinkActiveOptions]="{exact: true}">Home</a>
-    <a routerLink="/about" routerLinkActive="active">About</a>
-    <a routerLink="/create" routerLinkActive="active">Create</a>
-    <a routerLink="/edit" routerLinkActive="active">Edit</a>    
-</nav>
-<router-outlet></router-outlet>
+<div class="flex h-screen bg-gray-100">
+    <!-- Sidebar -->
+    <app-sidebar class="flex-shrink-0"></app-sidebar>
+
+    <!-- Main Content -->
+    <main class="flex-grow overflow-auto">
+        <router-outlet></router-outlet>
+    </main>
+</div>

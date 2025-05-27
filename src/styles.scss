@@ -1,3 +1,27 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Estilos globais */
+body {
+    @apply bg-gray-100;
+}
+
+/* Estilos para inputs e selects */
+input[type="checkbox"] {
+    @apply rounded border-gray-300;
+}
+
+select {
+    @apply appearance-none bg-white border border-gray-300;
+}
+
+/* Estilos para botões */
+button {
+    @apply font-medium;
+}
+
+/* Estilos para links ativos na sidebar */
+.router-link-active {
+    @apply bg-dark-purple;
+}

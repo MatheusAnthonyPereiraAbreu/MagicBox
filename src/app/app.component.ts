@@ -1,12 +1,19 @@
 import { Component } from '@angular/core';
-import {RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { RouterOutlet } from '@angular/router';
+import { SidebarComponent } from './components/sidebar/sidebar.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RouterLinkActive, RouterLink],
-  styleUrls: ['./app.component.scss'],
-  templateUrl: './app.component.html'
+  standalone: true,
+  imports: [RouterOutlet, SidebarComponent],
+  templateUrl: './app.component.html',
+  styles: [`
+    :host {
+      display: block;
+      height: 100vh;
+    }
+  `]
 })
 export class AppComponent {
-  title = 'Front-End';
+  title = 'PurpleBox';
 }

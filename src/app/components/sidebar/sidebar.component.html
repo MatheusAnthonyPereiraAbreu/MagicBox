@@ -1,0 +1,29 @@
+<nav class="h-full bg-violet-black text-white p-4 w-64">
+    <div class="mb-8">
+        <h1 class="text-2xl font-bold text-deep-lilac">PurpleBox</h1>
+    </div>
+
+    <ul class="space-y-4">
+        <li>
+            <a routerLink="/" routerLinkActive="bg-dark-purple" [routerLinkActiveOptions]="{exact: true}"
+                class="flex items-center space-x-2 p-2 rounded hover:bg-amethyst transition-colors text-white">
+                <i class="fas fa-home"></i>
+                <span>Dashboard</span>
+            </a>
+        </li>
+        <li>
+            <a routerLink="/reports" routerLinkActive="bg-dark-purple"
+                class="flex items-center space-x-2 p-2 rounded hover:bg-amethyst transition-colors text-white">
+                <i class="fas fa-chart-bar"></i>
+                <span>Relatórios</span>
+            </a>
+        </li>
+        <li>
+            <a routerLink="/settings" routerLinkActive="bg-dark-purple"
+                class="flex items-center space-x-2 p-2 rounded hover:bg-amethyst transition-colors text-white">
+                <i class="fas fa-cog"></i>
+                <span>Configurações</span>
+            </a>
+        </li>
+    </ul>
+</nav>

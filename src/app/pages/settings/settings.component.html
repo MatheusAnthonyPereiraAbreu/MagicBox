@@ -1,0 +1,58 @@
+<div class="p-6">
+    <h2 class="text-2xl font-bold mb-6 text-deep-lilac">Configurações</h2>
+
+    <div class="bg-white rounded-lg shadow-lg p-6">
+        <div class="space-y-6">
+            <!-- Preferências de Relatório -->
+            <div>
+                <h3 class="text-lg font-semibold mb-4 text-dark-purple">Preferências de Relatório</h3>
+                <div class="space-y-4">
+                    <div class="flex items-center">
+                        <input type="checkbox" id="autoExport" class="mr-2 focus:ring-2 focus:ring-vibrant-purple">
+                        <label for="autoExport">Exportar relatórios automaticamente</label>
+                    </div>
+                    <div class="flex items-center">
+                        <input type="checkbox" id="notifications" class="mr-2 focus:ring-2 focus:ring-vibrant-purple">
+                        <label for="notifications">Receber notificações de novos relatórios</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Formato de Exportação -->
+            <div>
+                <h3 class="text-lg font-semibold mb-4 text-dark-purple">Formato de Exportação</h3>
+                <select class="w-full p-2 border rounded-md focus:ring-2 focus:ring-vibrant-purple">
+                    <option value="pdf">PDF</option>
+                    <option value="excel">Excel</option>
+                    <option value="csv">CSV</option>
+                </select>
+            </div>
+
+            <!-- Tema da Interface -->
+            <div>
+                <h3 class="text-lg font-semibold mb-4 text-dark-purple">Tema da Interface</h3>
+                <div class="grid grid-cols-3 gap-4">
+                    <button class="p-4 border rounded-md hover:bg-gray-100 transition-colors">
+                        Claro
+                    </button>
+                    <button class="p-4 border rounded-md hover:bg-gray-100 transition-colors">
+                        Escuro
+                    </button>
+                    <button class="p-4 border rounded-md hover:bg-gray-100 transition-colors">
+                        Sistema
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Botões de Ação -->
+        <div class="mt-6 flex justify-end space-x-4">
+            <button class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors">
+                Cancelar
+            </button>
+            <button class="px-4 py-2 bg-vibrant-purple text-white rounded-md hover:bg-deep-lilac transition-colors">
+                Salvar Alterações
+            </button>
+        </div>
+    </div>
+</div>
