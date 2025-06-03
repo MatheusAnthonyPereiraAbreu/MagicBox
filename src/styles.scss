@@ -1,3 +1,60 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .btn-primary {
+    @apply px-4 py-2 bg-gradient-to-r from-primary-darker to-primary-light 
+           text-white rounded-lg 
+           shadow-lg
+           hover:from-primary-light hover:to-primary-darker
+           transform hover:scale-105
+           transition-all duration-300 ease-in-out;
+  }
+
+  .sidebar {
+    @apply fixed left-0 top-0 h-screen w-64 
+           bg-gradient-to-b from-primary-darker via-primary-dark to-primary
+           text-white
+           shadow-xl
+           p-6
+           rounded-r-3xl
+           ;
+
+    &-header {
+      @apply mb-8 border-b border-primary-light/30 pb-4;
+    }
+
+    &-link {
+      @apply flex items-center gap-3 py-2 px-4 
+             rounded-lg
+             text-white/80 
+             hover:bg-primary-light/20
+             hover:text-white
+             transition-all duration-200
+             w-full
+             ;
+
+      &.active {
+        @apply bg-primary-light/30 text-white;
+      }
+    }
+
+    &-section {
+      @apply mb-6
+      flex
+      flex-col
+      justify-center
+      items-center
+      w-full
+      gap-3
+      
+      ;
+
+      h3 {
+        @apply text-sm uppercase text-white/60 mb-2 px-4;
+      }
+    }
+  }
+}
+

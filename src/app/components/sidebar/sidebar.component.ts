@@ -9,7 +9,7 @@ import { RouterModule } from '@angular/router';
                 <h1 class="text-xl font-bold text-center">PurpleBox</h1>
             </div>
 
-            <div class="sidebar-section">
+            <div class="sidebar-section gap-5">
                 <h3>Menu</h3>
                 <a class="sidebar-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
                     <i class="ph ph-house-simple text-xl"></i>
