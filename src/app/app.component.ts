@@ -11,6 +11,6 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
         </main>
     `,
   standalone: true,
-  imports: [RouterModule, SidebarComponent]
+  imports: [RouterModule, SidebarComponent],
 })
 export class AppComponent { }

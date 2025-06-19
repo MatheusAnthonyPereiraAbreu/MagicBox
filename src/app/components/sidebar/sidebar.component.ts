@@ -15,17 +15,17 @@ import { RouterModule } from '@angular/router';
                     <i class="ph ph-house-simple text-xl"></i>
                     <span>Home</span>
                 </a>
-                <a class="sidebar-link" routerLink="/about" routerLinkActive="active">
-                    <i class="ph ph-info text-xl"></i>
-                    <span>About</span>
-                </a>
-                <a class="sidebar-link" routerLink="/create" routerLinkActive="active">
+                <a class="sidebar-link" routerLink="/relatory" routerLinkActive="active">
                     <i class="ph ph-plus-circle text-xl"></i>
-                    <span>Create</span>
+                    <span>Relatory</span>
                 </a>
                 <a class="sidebar-link" routerLink="/edit" routerLinkActive="active">
                     <i class="ph ph-pencil-simple text-xl"></i>
                     <span>Edit</span>
+                </a>
+                <a class="sidebar-link" routerLink="/about" routerLinkActive="active">
+                    <i class="ph ph-info text-xl"></i>
+                    <span>About</span>
                 </a>
             </div>
         </nav>
