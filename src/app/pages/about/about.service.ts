@@ -17,7 +17,13 @@ export class AboutService {
 
     constructor(public http: HttpClient) { }
 
+
     getUser(username: string): Observable<GithubUser> {
-        return this.http.get<GithubUser>(`${this.apiUrl}${username}`);
+        return this.http.get<GithubUser>(
+            `${this.apiUrl}${username}`,
+            {
+                headers: { Authorization: `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` }
+            }
+        );
     }
-} 
+}
