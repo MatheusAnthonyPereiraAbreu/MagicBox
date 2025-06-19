@@ -16,9 +16,10 @@ export class AboutComponent implements OnInit {
     { user: null, role: 'DataBase' },
     { user: null, role: 'Documentador' },
     { user: null, role: 'Front-End' },
-    { user: null, role: 'Engenheiro de Software' }
+    { user: null, role: 'Engenheiro de Software' },
+    { user: null, role: 'Back-End' }
   ];
-  usernames = ['tomlavez', 'Lucasskyher', 'MatheusAnthonyPereiraAbreu', 'AugustoZanoli'];
+  usernames = ['tomlavez', 'Lucasskyher', 'MatheusAnthonyPereiraAbreu', 'AugustoZanoli', 'typedefAlejandro'];
 
   constructor(private aboutService: AboutService) { }
 
