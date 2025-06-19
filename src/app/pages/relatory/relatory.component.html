@@ -1,9 +1,9 @@
 <section class="p-6 w-full h-full transition-all duration-500 ease-in opacity-0 animate-fadein">
-    <h1 class="text-3xl font-bold text-text-heading mb-4">Relatório Adock</h1>
+    <h1 class="text-3xl font-bold text-text-dark mb-4">Relatório Adock</h1>
     <div class="grid grid-cols-5 w-full max-h-screen h-[calc(100vh-10rem)] gap-x-5 gap-y-5">
         <!-- Filtros -->
         <div
-            class="bg-gradient-to-br from-gray-600 via-[#1a1a1a] to-[#2c2c2e] rounded-lg border border-inherit border-l-8 border-primary-dark col-span-2 w-full h-full shadow-lg p-6 flex flex-col gap-4">
+            class="bg-gradient-to-br from-purple-500 via-[#1a1a1a] to-[#2c2c2e] rounded-lg border border-inherit border-l-8 border-primary-dark col-span-2 w-full h-full shadow-lg p-6 flex flex-col gap-4">
             <h2 class="text-xl font-semibold text-gray-200 mb-2">Filtros</h2>
             <label class="text-gray-300 text-sm">Data Inicial
                 <input type="date"
@@ -25,7 +25,7 @@
         </div>
         <!-- Gráficos -->
         <div
-            class="bg-gradient-to-br from-gray-600 via-[#1a1a1a] to-[#2c2c2e] rounded-lg border border-inherit border-l-8 border-primary-dark col-span-3 w-full h-full shadow-lg p-6 flex flex-col gap-4">
+            class="bg-gradient-to-br from-purple-500 via-[#1a1a1a] to-[#2c2c2e] rounded-lg border border-inherit border-l-8 border-primary-dark col-span-3 w-full h-full shadow-lg p-6 flex flex-col gap-4">
             <h2 class="text-xl font-semibold text-gray-200 mb-2">Gráficos Dinâmicos</h2>
             <div class="w-full h-full flex flex-col gap-4 justify-center items-center">
                 <div class="w-full h-full">
@@ -76,36 +76,7 @@
                     </p-carousel>
                 </div>
             </div>
-            <!-- Gráficos ocultos para exportação PDF -->
-            <div id="hidden-charts" style="display:none">
-                <ngx-charts-pie-chart
-                    [view]="view"
-                    [scheme]="colorScheme"
-                    [results]="pieData"
-                    [legend]="true"
-                    [labels]="true"
-                    [doughnut]="false"
-                    [explodeSlices]="false">
-                </ngx-charts-pie-chart>
-                <ngx-charts-bar-vertical
-                    [view]="view"
-                    [scheme]="colorScheme"
-                    [results]="barData"
-                    [legend]="true">
-                </ngx-charts-bar-vertical>
-                <ngx-charts-line-chart
-                    [view]="view"
-                    [scheme]="colorScheme"
-                    [results]="lineData"
-                    [legend]="true">
-                </ngx-charts-line-chart>
-                <ngx-charts-area-chart
-                    [view]="view"
-                    [scheme]="colorScheme"
-                    [results]="areaData"
-                    [legend]="true">
-                </ngx-charts-area-chart>
-            </div>
+
         </div>
     </div>
 </section>

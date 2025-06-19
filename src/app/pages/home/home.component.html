@@ -1,24 +1,69 @@
-<section class="p-6 w-full h-full transition-all duration-500 ease-in opacity-0 animate-fadein">
-    <h1 class="text-3xl font-bold text-text-heading mb-4">Bem-vindo ao PurpleBox</h1>
-    <div class="grid grid-cols-5 w-full max-h-screen h-[calc(100vh-10rem)] gap-x-5 gap-y-5">
-        <div
-            class="bg-gradient-to-br from-gray-600 via-[#1a1a1a] to-[#2c2c2e] rounded-lg border border-inherit border-l-8 border-primary-dark col-span-3 w-full h-full shadow-lg">
-            <span class="text-gray-300">
-                Grafico 1
-            </span>
+<section class="p-6 w-full h-full transition-all duration-500 ease-in opacity-0 animate-fadein flex flex-col gap-8">
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+        <div>
+            <h1 class="text-3xl font-bold text-text-dark mb-2">Bem-vindo ao PurpleBox</h1>
+            <p class="text-gray-100 mb-4">Sua central de estatísticas musicais</p>
+        </div>
+        <!-- Carrossel de Bandeiras -->
+        <div class="bg-gradient-to-br from-purple-500 via-[#1a1a1a] to-[#2c2c2e] rounded-lg border border-inherit border-l-8 border-primary-dark shadow-lg p-4 min-w-[350px]">
+            <h2 class="text-lg font-semibold text-gray-200 mb-4 text-left">Países</h2>
+            <p-carousel [value]="flags" [numVisible]="5" [circular]="true" [showIndicators]="false" [showNavigators]="true" styleClass="full-carousel">
+                <ng-template pTemplate="item" let-flag>
+                    <div class="flex flex-col items-center justify-center p-2">
+                        <img [src]="flag.img" [alt]="flag.name" class="w-16 h-10 object-cover rounded shadow-md border border-gray-400 mb-2 cursor-pointer" />
+                        <span class="text-gray-200 text-sm">{{ flag.name }}</span>
+                    </div>
+                </ng-template>
+            </p-carousel>
+        </div>
+    </div>
 
+    <!-- Gráficos de Pizza -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
+        <div class="col-span-1 bg-gradient-to-br from-purple-500 via-[#1a1a1a] to-[#2c2c2e] rounded-lg border border-inherit border-l-8 border-primary-dark shadow-lg p-4 flex flex-col items-center">
+            <h2 class="text-lg font-semibold text-gray-200 mb-2">Artistas</h2>
+            <ngx-charts-pie-chart
+                [view]="view"
+                [scheme]="colorScheme"
+                [results]="artistasData"
+                [legend]="true"
+                [labels]="true"
+                class="w-full h-64">
+            </ngx-charts-pie-chart>
         </div>
-        <div
-            class="bg-gradient-to-br from-gray-600 via-[#1a1a1a] to-[#2c2c2e] rounded-lg border border-inherit border-l-8 border-primary-dark col-span-2 w-full h-full shadow-lg">
-            <span class="text-gray-300">
-                Grafico 2
-            </span>
+        <div class="col-span-1 bg-gradient-to-br from-purple-500 via-[#1a1a1a] to-[#2c2c2e] rounded-lg border border-inherit border-l-8 border-primary-dark shadow-lg p-4 flex flex-col items-center">
+            <h2 class="text-lg font-semibold text-gray-200 mb-2">Músicas</h2>
+            <ngx-charts-pie-chart
+                [view]="view"
+                [scheme]="colorScheme"
+                [results]="musicasData"
+                [legend]="true"
+                [labels]="true"
+                class="w-full h-64">
+            </ngx-charts-pie-chart>
         </div>
-        <div
-            class="bg-gradient-to-br from-gray-600 via-[#1a1a1a] to-[#2c2c2e] rounded-lg border border-inherit border-l-8 border-primary-dark col-span-5 w-full h-full shadow-lg">
-            <span class="text-gray-300">
-                Grafico 3
-            </span>
+        <div class="col-span-1 bg-gradient-to-br from-purple-500 via-[#1a1a1a] to-[#2c2c2e] rounded-lg border border-inherit border-l-8 border-primary-dark shadow-lg p-4 flex flex-col items-center">
+            <h2 class="text-lg font-semibold text-gray-200 mb-2">Álbuns</h2>
+            <ngx-charts-pie-chart
+                [view]="view"
+                [scheme]="colorScheme"
+                [results]="albunsData"
+                [legend]="true"
+                [labels]="true"
+                class="w-full h-64">
+            </ngx-charts-pie-chart>
         </div>
+    </div>
+
+    <!-- Gráfico de Área -->
+    <div class="w-full bg-gradient-to-br from-purple-500 via-[#1a1a1a] to-[#2c2c2e] rounded-lg border border-inherit border-l-8 border-primary-dark shadow-lg p-4 flex flex-col items-center">
+        <h2 class="text-lg font-semibold text-gray-200 mb-2">Gêneros</h2>
+        <ngx-charts-area-chart
+            [view]="viewArea"
+            [scheme]="colorScheme"
+            [results]="generosData"
+            [legend]="true"
+            class="w-full h-64">
+        </ngx-charts-area-chart>
     </div>
 </section>

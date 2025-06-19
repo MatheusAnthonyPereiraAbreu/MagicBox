@@ -3,10 +3,10 @@
 @tailwind utilities;
 @layer components {
   .btn-primary {
-    @apply px-4 py-2 bg-gradient-to-r from-primary-darker to-primary-light 
+    @apply px-4 py-2 bg-gradient-to-r from-primary-darker to-primary-dark 
            text-white rounded-lg 
            shadow-lg
-           hover:from-primary-light hover:to-primary-darker
+           hover:from-primary-dark hover:to-primary-darker
            transform hover:scale-105
            transition-all duration-500 ease-in-out;
   }
@@ -19,7 +19,7 @@
            rounded-r-3xl
            backdrop-blur-lg
            bg-gradient-to-br
-           from-primary-darker via-primary-dark to-[#2c2c2e]
+           from-primary-dark to-[#2c2c2e]
            border border-white/10;
   
     &-header {
@@ -69,3 +69,63 @@
   }
 }
 
+// Customizações globais para gráficos e carrossel
+::ng-deep .legend-label-text,
+::ng-deep .legend-label,
+::ng-deep .legend-title,
+::ng-deep .legend-entry-text {
+  fill: #d1d5db !important;
+  color: #d1d5db !important;
+}
+
+::ng-deep .label,
+::ng-deep .pie-label,
+::ng-deep .bar-label,
+::ng-deep .line-label,
+::ng-deep .area-label * {
+  fill: #d1d5db !important;
+  color: #d1d5db !important;
+}
+
+::ng-deep .chart-legend,
+::ng-deep .chart-legend * {
+  color: #d1d5db !important;
+  fill: #d1d5db !important;
+}
+
+::ng-deep .p-button * {
+  color: rgb(170, 170, 170) !important;
+}
+
+::ng-deep .p-carousel .p-carousel-next,
+::ng-deep .p-carousel .p-carousel-prev,
+::ng-deep .p-carousel .p-carousel-indicators .p-carousel-indicator button * {
+  background: #2d2d2d !important;
+  color: #d1d5db !important;
+  border: none !important;
+}
+::ng-deep .p-carousel .p-carousel-indicators .p-carousel-indicator.p-highlight button * {
+  background: #d1d5db !important;
+  color: #2d2d2d !important;
+}
+
+::ng-deep .legend-label-text,
+::ng-deep .legend-label,
+::ng-deep .legend-title,
+::ng-deep .legend-entry-text {
+  fill: #d1d5db !important;
+  color: #d1d5db !important;
+}
+
+::ng-deep .label,
+::ng-deep .pie-label,
+::ng-deep .bar-label,
+::ng-deep .line-label,
+::ng-deep .area-label {
+  fill: #d1d5db !important;
+  color: #d1d5db !important;
+}
+
+::ng-deep .p-button {
+  color: rgb(170, 170, 170) !important;
+}
