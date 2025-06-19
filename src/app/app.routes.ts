@@ -1,28 +1,20 @@
 import { Routes } from '@angular/router';
-import { HomeComponent } from './pages/home/home.component';
 
 export const routes: Routes = [
-  { 
-    path: '', 
-    component: HomeComponent 
-  },
-  { 
-    path: 'about', 
-    loadComponent: () => 
-      import('./pages/about/about.component').then(m => m.AboutComponent)
+  {
+    path: '',
+    loadComponent: () => import('./pages/home/home.component').then(m => m.HomeComponent)
   },
   {
-    path: 'create',
-    loadComponent: () =>
-      import('./pages/create/create.component').then(m => m.CreateComponent)
+    path: 'about',
+    loadComponent: () => import('./pages/about/about.component').then(m => m.AboutComponent)
+  },
+  {
+    path: 'relatory',
+    loadComponent: () => import('./pages/relatory/relatory.component').then(m => m.RelatoryComponent)
   },
   {
     path: 'edit',
-    loadComponent: () =>
-      import('./pages/edit/edit.component').then(m => m.EditComponent)
-  },
-  {
-    path: '**', 
-    redirectTo: ''  // Redireciona para home se rota não existir
+    loadComponent: () => import('./pages/edit/edit.component').then(m => m.EditComponent)
   }
 ];

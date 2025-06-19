@@ -1,0 +1,20 @@
+::ng-deep .legend-label-text,
+::ng-deep .legend-label,
+::ng-deep .legend-title,
+::ng-deep .legend-entry-text {
+  fill: #d1d5db !important;
+  color: #d1d5db !important;
+}
+
+::ng-deep .label,
+::ng-deep .pie-label,
+::ng-deep .bar-label,
+::ng-deep .line-label,
+::ng-deep .area-label {
+  fill: #d1d5db !important;
+  color: #d1d5db !important;
+}
+
+::ng-deep .p-button {
+  color: rgb(170, 170, 170) !important;
+}
