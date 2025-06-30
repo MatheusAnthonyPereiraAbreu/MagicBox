@@ -16,15 +16,7 @@ public class RelatorioService {
     }
 
     public List<TopMusicaDTO> buscarTopMusicas() {
-        return repository.buscarTopMusicasRaw().stream()
-            .map(row -> new TopMusicaDTO(
-                (String) row[0],
-                (String) row[1],
-                (String) row[2],
-                (String) row[3],
-                (String) row[4],
-                row[5] != null ? ((Number) row[5]).shortValue() : null
-            ))
-            .toList();
-    }
+    return repository.buscarTopMusicas();
+}
+
 }
