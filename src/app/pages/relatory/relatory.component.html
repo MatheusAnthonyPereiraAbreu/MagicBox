@@ -1,82 +1,344 @@
-<section class="p-6 w-full h-full transition-all duration-500 ease-in opacity-0 animate-fadein">
-    <h1 class="text-3xl font-bold text-text-dark mb-4">Relatório Adock</h1>
-    <div class="grid grid-cols-5 w-full max-h-screen h-[calc(100vh-10rem)] gap-x-5 gap-y-5">
-        <!-- Filtros -->
-        <div
-            class="bg-gradient-to-br from-purple-500 via-[#1a1a1a] to-[#2c2c2e] rounded-lg border border-inherit border-l-8 border-primary-dark col-span-2 w-full h-full shadow-lg p-6 flex flex-col gap-4">
-            <h2 class="text-xl font-semibold text-gray-200 mb-2">Filtros</h2>
-            <label class="text-gray-300 text-sm">Data Inicial
-                <input type="date"
-                    class="mt-1 w-full rounded bg-white/10 text-gray-100 p-2 border border-white/10 focus:outline-none focus:ring-2 focus:ring-primary-light" />
-            </label>
-            <label class="text-gray-300 text-sm">Data Final
-                <input type="date"
-                    class="mt-1 w-full rounded bg-white/10 text-gray-100 p-2 border border-white/10 focus:outline-none focus:ring-2 focus:ring-primary-light" />
-            </label>
-            <label class="text-gray-300 text-sm">Categoria
-                <select
-                    class="mt-1 w-full rounded bg-white/10 text-gray-100 p-2 border border-white/10 focus:outline-none focus:ring-2 focus:ring-primary-light">
-                    <option value="">Todas</option>
-                    <option value="cat1">Categoria 1</option>
-                    <option value="cat2">Categoria 2</option>
-                </select>
-            </label>
-            <button class="btn-primary w-full mt-4">Gerar Relatório</button>
-        </div>
-        <!-- Gráficos -->
-        <div
-            class="bg-gradient-to-br from-purple-500 via-[#1a1a1a] to-[#2c2c2e] rounded-lg border border-inherit border-l-8 border-primary-dark col-span-3 w-full h-full shadow-lg p-6 flex flex-col gap-4">
-            <h2 class="text-xl font-semibold text-gray-200 mb-2">Gráficos Dinâmicos</h2>
-            <div class="w-full h-full flex flex-col gap-4 justify-center items-center">
-                <div class="w-full h-full">
-                    <p-carousel [value]="[0,1,2,3]" [numVisible]="1" [circular]="true" [showIndicators]="true" [showNavigators]="true" styleClass="full-carousel">
-                        <ng-template pTemplate="item" let-item>
-                            <div style="height:100%;display:flex;align-items:center;justify-content:center;width:100%;">
-                                <div class="w-full h-full flex flex-col items-center justify-center">
-                                    <h3 class="text-lg text-gray-200 mb-2">
-                                        <span *ngIf="item === 0">Gráfico de Pizza</span>
-                                        <span *ngIf="item === 1">Gráfico de Barras</span>
-                                        <span *ngIf="item === 2">Gráfico de Linha</span>
-                                        <span *ngIf="item === 3">Gráfico de Área</span>
-                                    </h3>
-                                    <ngx-charts-pie-chart *ngIf="item === 0"
-                                        [view]="view"
-                                        [scheme]="colorScheme"
-                                        [results]="pieData"
-                                        [legend]="true"
-                                        [labels]="true"
-                                        [doughnut]="false"
-                                        [explodeSlices]="false"
-                                        class="w-full h-full">
-                                    </ngx-charts-pie-chart>
-                                    <ngx-charts-bar-vertical *ngIf="item === 1"
-                                        [view]="view"
-                                        [scheme]="colorScheme"
-                                        [results]="barData"
-                                        [legend]="true"
-                                        class="w-full h-full">
-                                    </ngx-charts-bar-vertical>
-                                    <ngx-charts-line-chart *ngIf="item === 2"
-                                        [view]="view"
-                                        [scheme]="colorScheme"
-                                        [results]="lineData"
-                                        [legend]="true"
-                                        class="w-full h-full">
-                                    </ngx-charts-line-chart>
-                                    <ngx-charts-area-chart *ngIf="item === 3"
-                                        [view]="view"
-                                        [scheme]="colorScheme"
-                                        [results]="areaData"
-                                        [legend]="true"
-                                        class="w-full h-full">
-                                    </ngx-charts-area-chart>
-                                </div>
-                            </div>
-                        </ng-template>
-                    </p-carousel>
-                </div>
-            </div>
+<section class="p-6 w-full min-h-screen">
+    <h1 class="text-4xl font-extrabold text-transparent bg-clip-text mb-4" style="background-image: linear-gradient(to right, var(--color-primary), var(--color-primary-dark));">
+    Relatório Ad hoc
+  </h1>
 
+  <!-- Seleção de Tabelas -->
+  <div class="rounded-xl shadow-lg p-6 border-l-8 transition-all duration-300 card-purple mb-8">
+    <h2 class="text-lg font-bold mb-4 flex items-center gap-2 card-purple-text">
+      <span class="ph ph-database"></span>Selecione as Tabelas
+    </h2>
+    <form [formGroup]="formTables">
+      <div class="flex flex-wrap gap-4">
+        <div *ngFor="let table of tables" class="flex items-center gap-2 cursor-pointer">
+          <label class="relative flex items-center cursor-pointer select-none w-5 h-5">
+            <input
+              type="checkbox"
+              [formControlName]="table"
+              id="table-{{table}}"
+              class="peer appearance-none w-5 h-5 rounded border border-primary bg-[#18181b] checked:bg-primary checked:border-primary transition-all duration-200 block focus:ring-2 focus:ring-primary-dark"
+            />
+          </label>
+          <span class="text-white font-medium ml-2">{{ table }}</span>
         </div>
+      </div>
+    </form>
+  </div>
+
+  <!-- Seleção de Colunas -->
+  <div *ngIf="selectedTables.length > 0" class="rounded-xl shadow-lg p-6 border-l-8 mb-8 transition-all duration-300 card-amber">
+    <h2 class="text-lg font-bold mb-4 flex items-center gap-2 card-amber-text">
+      <span class="ph ph-columns"></span>Selecione as Colunas
+    </h2>
+    <div class="flex flex-col gap-4">
+      <div *ngFor="let table of allDisplayTables; let tableIndex = index" class="rounded-lg p-4 transition-all duration-300 card-indigo" [class.animate-fade-in]="selectedTables.includes(table)" [class.animate-fade-out]="removingTables.includes(table)" [style.animation-delay]="tableIndex * 100 + 'ms'">
+        <h3 class="text-md font-semibold mb-3 flex items-center gap-2 card-indigo-text">
+          <span class="ph ph-table"></span>
+          {{ table }}
+        </h3>
+        <form [formGroup]="formColumns">
+          <div class="flex flex-col gap-2">
+            <div *ngFor="let col of getColumnsForTable(table); let colIndex = index" class="flex items-center justify-between gap-4 p-3 bg-white/5 rounded-lg hover:bg-white/10 transition-all duration-200 animate-slide-in" [style.animation-delay]="(tableIndex * 100) + (colIndex * 50) + 'ms'">
+              <div class="flex items-center gap-3">
+                <label class="relative flex items-center cursor-pointer select-none w-5 h-5">
+                  <input
+                    type="checkbox"
+                    [formControlName]="table + '.' + col"
+                    id="col-{{table}}-{{col}}"
+                    class="peer appearance-none w-5 h-5 rounded border border-primary bg-[#18181b] checked:bg-primary checked:border-primary transition-all duration-200 block focus:ring-2 focus:ring-primary-dark"
+                  />
+                </label>
+                <span class="text-white font-medium">{{ col }}</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <form [formGroup]="formAliases">
+                  <input
+                    type="text"
+                    [formControlName]="table + '.' + col"
+                    placeholder="Alias (opcional)"
+                    class="bg-white/10 text-white border border-primary rounded px-3 py-2 w-32 focus:outline-none focus:ring-2 focus:ring-primary placeholder-gray-400 transition-all duration-200 hover:bg-white/15"
+                  />
+                </form>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
     </div>
+  </div>
+
+  <!-- Filtros e Agrupamentos -->
+  <div *ngIf="selectedTables.length > 0" class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+    <!-- Filtros -->
+    <div class="rounded-xl shadow-lg p-6 border-l-8 flex flex-col gap-4 transition-all duration-300 card-emerald">
+      <h2 class="text-lg font-bold mb-2 flex items-center gap-2 card-emerald-text">
+        <span class="ph ph-funnel"></span>Filtros
+      </h2>
+      <form [formGroup]="form">
+        <div formArrayName="filters" class="flex flex-col gap-3">
+          <div *ngFor="let filter of filters.controls; let i = index" [formGroupName]="i" class="flex items-center gap-2 p-3 bg-white/5 rounded-lg hover:bg-white/10 transition-all duration-200 animate-slide-in" [style.animation-delay]="i * 50 + 'ms'">
+            <select formControlName="field" class="bg-white/10 text-white border rounded px-3 py-2 focus:outline-none focus:ring-2 transition-all duration-200" style="border-color: var(--color-primary);" style="--tw-ring-color: var(--color-primary);">
+              <option value="" disabled hidden style="background-color: rgba(var(--color-primary-rgb), 0.1); color: var(--color-primary);">Campo</option>
+              <option *ngFor="let col of availableColumns" [value]="col.table + '.' + col.name" style="background-color: rgba(var(--color-primary-rgb), 0.1); color: var(--color-primary);">{{ col.table }}.{{ col.name }}</option>
+            </select>
+            <select formControlName="operator" class="bg-white/10 text-white border rounded px-3 py-2 focus:outline-none focus:ring-2 transition-all duration-200" style="border-color: var(--color-primary);" style="--tw-ring-color: var(--color-primary);">
+              <option value="=" style="background-color: rgba(var(--color-primary-rgb), 0.1); color: var(--color-primary);">=</option>
+              <option value=">" style="background-color: rgba(var(--color-primary-rgb), 0.1); color: var(--color-primary);">&gt;</option>
+              <option value="<" style="background-color: rgba(var(--color-primary-rgb), 0.1); color: var(--color-primary);">&lt;</option>
+              <option value=">=" style="background-color: rgba(var(--color-primary-rgb), 0.1); color: var(--color-primary);">&gt;=</option>
+              <option value="<=" style="background-color: rgba(var(--color-primary-rgb), 0.1); color: var(--color-primary);">&lt;=</option>
+              <option value="!=" style="background-color: rgba(var(--color-primary-rgb), 0.1); color: var(--color-primary);">!=</option>
+              <option value="like" style="background-color: rgba(var(--color-primary-rgb), 0.1); color: var(--color-primary);">Contém</option>
+            </select>
+            <input type="text" formControlName="value" placeholder="Valor" class="bg-white/10 text-white border rounded px-3 py-2 w-24 focus:outline-none focus:ring-2 transition-all duration-200" style="border-color: var(--color-primary);" style="--tw-ring-color: var(--color-primary);" />
+            <button type="button" (click)="removeFilter(i)" class="ml-1 w-8 h-8 flex items-center justify-center rounded bg-red-600 hover:bg-red-700 text-white" title="Remover filtro">
+              <i class="ph ph-trash text-lg"></i>
+            </button>
+          </div>
+        </div>
+        <button type="button" class="mt-2 px-4 py-2 text-white rounded-lg flex items-center gap-2 w-fit transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105" style="background-color: var(--color-primary);" style="--tw-ring-color: var(--color-primary-dark);" (click)="addFilter()">
+          <span class="ph ph-plus text-sm"></span>
+          Adicionar Filtro
+        </button>
+      </form>
+    </div>
+    <!-- Agrupamento -->
+    <div class="rounded-xl shadow-lg p-6 border-l-8 flex flex-col gap-4 transition-all duration-300 card-blue">
+      <h2 class="text-lg font-bold mb-2 flex items-center gap-2 card-blue-text">
+        <span class="ph ph-stack"></span>Agrupamento
+      </h2>
+      <form [formGroup]="form">
+        <div formArrayName="groups" class="flex flex-col gap-3">
+          <div *ngFor="let group of groups.controls; let i = index" [formGroupName]="i" class="flex items-center gap-2 p-3 bg-white/5 rounded-lg hover:bg-white/10 transition-all duration-200 animate-slide-in" [style.animation-delay]="i * 50 + 'ms'">
+            <select formControlName="field" class="bg-white/10 text-white border rounded px-3 py-2 focus:outline-none focus:ring-2 transition-all duration-200" style="border-color: var(--color-primary);" style="--tw-ring-color: var(--color-primary);">
+              <option value="" disabled hidden style="background-color: rgba(var(--color-primary-rgb), 0.1); color: var(--color-primary);">Campo</option>
+              <option *ngFor="let col of availableColumns" [value]="col.table + '.' + col.name" style="background-color: rgba(var(--color-primary-rgb), 0.1); color: var(--color-primary);">{{ col.table }}.{{ col.name }}</option>
+            </select>
+            <input type="text" formControlName="alias" placeholder="Alias" class="bg-white/10 text-white border rounded px-3 py-2 w-24 focus:outline-none focus:ring-2 transition-all duration-200" style="border-color: var(--color-primary);" style="--tw-ring-color: var(--color-primary);" />
+            <button type="button" (click)="removeGroup(i)" class="ml-1 w-8 h-8 flex items-center justify-center rounded bg-red-600 hover:bg-red-700 text-white" title="Remover agrupamento">
+              <i class="ph ph-trash text-lg"></i>
+            </button>
+          </div>
+        </div>
+        <button type="button" class="mt-2 px-4 py-2 text-white rounded-lg flex items-center gap-2 w-fit transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105" style="background-color: var(--color-primary);" style="--tw-ring-color: var(--color-primary-dark);" (click)="addGroup()">
+          <span class="ph ph-plus text-sm"></span>
+          Adicionar Agrupamento
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Botões de ação -->
+  <div class="flex gap-4 mt-6">
+    <button
+      class="px-6 py-3 text-white rounded-lg font-bold flex items-center gap-3 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 bg-primary hover:bg-primary-dark"
+      (click)="onSearch()"
+    >
+      <span class="ph ph-magnifying-glass text-lg"></span>
+      Buscar
+    </button>
+    <button
+      class="px-6 py-3 text-white rounded-lg font-bold flex items-center gap-3 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 bg-primary-darker hover:bg-primary-dark"
+      (click)="onReset()"
+    >
+      <span class="ph ph-arrow-counter-clockwise text-lg"></span>
+      Limpar
+    </button>
+  </div>
+
+  <!-- Tabela de Resultados -->
+  <div class="mt-8 rounded-xl shadow-lg overflow-hidden card-indigo">
+    <div class="p-6 border-b" style="border-color: rgba(var(--color-primary-rgb), 0.3);">
+      <h2 class="text-lg font-bold flex items-center gap-2 card-indigo-text">
+        <span class="ph ph-table"></span>
+        Resultados da Consulta
+      </h2>
+      <p class="text-gray-400 text-sm mt-1">Exibindo 15 registros encontrados</p>
+    </div>
+    
+    <div class="overflow-x-auto">
+      <table class="w-full">
+        <thead style="background-color: rgba(var(--color-primary-rgb), 0.2);">
+          <tr>
+            <th class="px-6 py-4 text-left text-sm font-semibold uppercase tracking-wider" style="color: rgba(var(--color-primary-rgb), 0.8);">
+              <div class="flex items-center gap-2">
+                <span class="ph ph-user"></span>
+                Artista
+              </div>
+            </th>
+            <th class="px-6 py-4 text-left text-sm font-semibold uppercase tracking-wider" style="color: rgba(var(--color-primary-rgb), 0.8);">
+              <div class="flex items-center gap-2">
+                <span class="ph ph-music-notes"></span>
+                Música
+              </div>
+            </th>
+            <th class="px-6 py-4 text-left text-sm font-semibold uppercase tracking-wider" style="color: rgba(var(--color-primary-rgb), 0.8);">
+              <div class="flex items-center gap-2">
+                <span class="ph ph-users"></span>
+                Ouvintes
+              </div>
+            </th>
+            <th class="px-6 py-4 text-left text-sm font-semibold uppercase tracking-wider" style="color: rgba(var(--color-primary-rgb), 0.8);">
+              <div class="flex items-center gap-2">
+                <span class="ph ph-play-circle"></span>
+                Plays
+              </div>
+            </th>
+            <th class="px-6 py-4 text-left text-sm font-semibold uppercase tracking-wider" style="color: rgba(var(--color-primary-rgb), 0.8);">
+              <div class="flex items-center gap-2">
+                <span class="ph ph-flag"></span>
+                País
+              </div>
+            </th>
+            <th class="px-6 py-4 text-left text-sm font-semibold uppercase tracking-wider" style="color: rgba(var(--color-primary-rgb), 0.8);">
+              <div class="flex items-center gap-2">
+                <span class="ph ph-trend-up"></span>
+                Ranking
+              </div>
+            </th>
+          </tr>
+        </thead>
+        <tbody style="border-color: rgba(var(--color-primary-rgb), 0.2);">
+          <tr class="transition-colors duration-200" style="--tw-divide-color: rgba(var(--color-primary-rgb), 0.2);" style="--tw-hover-bg-opacity: 0.1;" style="--tw-hover-bg-color: rgba(var(--color-primary-rgb), var(--tw-hover-bg-opacity));">
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="flex items-center">
+                <div class="flex-shrink-0 h-10 w-10">
+                  <div class="h-10 w-10 rounded-full flex items-center justify-center" style="background-color: rgba(var(--color-primary-rgb), 0.3);">
+                    <span class="ph ph-user" style="color: rgba(var(--color-primary-rgb), 0.8);"></span>
+                  </div>
+                </div>
+                <div class="ml-4">
+                  <div class="text-sm font-medium text-white">Drake</div>
+                  <div class="text-sm text-gray-400">Hip-Hop</div>
+                </div>
+              </div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="text-sm text-white">God's Plan</div>
+              <div class="text-sm text-gray-400">Scorpion</div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="text-sm text-white">2.5B</div>
+              <div class="text-sm text-gray-400">+12%</div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="text-sm text-white">1.8B</div>
+              <div class="text-sm text-gray-400">+8%</div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="flex items-center">
+                <div class="w-6 h-4 rounded bg-gradient-to-r from-red-500 to-blue-500 mr-2"></div>
+                <span class="text-sm text-white">Estados Unidos</span>
+              </div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                #1
+              </span>
+            </td>
+          </tr>
+          
+          <tr class="transition-colors duration-200" style="--tw-divide-color: rgba(var(--color-primary-rgb), 0.2);" style="--tw-hover-bg-opacity: 0.1;" style="--tw-hover-bg-color: rgba(var(--color-primary-rgb), var(--tw-hover-bg-opacity));">
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="flex items-center">
+                <div class="flex-shrink-0 h-10 w-10">
+                  <div class="h-10 w-10 rounded-full flex items-center justify-center" style="background-color: rgba(var(--color-primary-rgb), 0.3);">
+                    <span class="ph ph-user" style="color: rgba(var(--color-primary-rgb), 0.8);"></span>
+                  </div>
+                </div>
+                <div class="ml-4">
+                  <div class="text-sm font-medium text-white">The Weeknd</div>
+                  <div class="text-sm text-gray-400">R&B</div>
+                </div>
+              </div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="text-sm text-white">Blinding Lights</div>
+              <div class="text-sm text-gray-400">After Hours</div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="text-sm text-white">2.1B</div>
+              <div class="text-sm text-gray-400">+15%</div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="text-sm text-white">1.6B</div>
+              <div class="text-sm text-gray-400">+10%</div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="flex items-center">
+                <div class="w-6 h-4 rounded bg-gradient-to-r from-red-500 to-white mr-2"></div>
+                <span class="text-sm text-white">Canadá</span>
+              </div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                #2
+              </span>
+            </td>
+          </tr>
+          
+          <tr class="transition-colors duration-200" style="--tw-divide-color: rgba(var(--color-primary-rgb), 0.2);" style="--tw-hover-bg-opacity: 0.1;" style="--tw-hover-bg-color: rgba(var(--color-primary-rgb), var(--tw-hover-bg-opacity));">
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="flex items-center">
+                <div class="flex-shrink-0 h-10 w-10">
+                  <div class="h-10 w-10 rounded-full flex items-center justify-center" style="background-color: rgba(var(--color-primary-rgb), 0.3);">
+                    <span class="ph ph-user" style="color: rgba(var(--color-primary-rgb), 0.8);"></span>
+                  </div>
+                </div>
+                <div class="ml-4">
+                  <div class="text-sm font-medium text-white">Ed Sheeran</div>
+                  <div class="text-sm text-gray-400">Pop</div>
+                </div>
+              </div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="text-sm text-white">Shape of You</div>
+              <div class="text-sm text-gray-400">÷ (Divide)</div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="text-sm text-white">1.9B</div>
+              <div class="text-sm text-gray-400">+5%</div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="text-sm text-white">1.4B</div>
+              <div class="text-sm text-gray-400">+3%</div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="flex items-center">
+                <div class="w-6 h-4 rounded bg-gradient-to-r from-red-500 to-blue-500 mr-2"></div>
+                <span class="text-sm text-white">Reino Unido</span>
+              </div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                #3
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Paginação -->
+    <div class="px-6 py-4 border-t" style="background-color: rgba(var(--color-primary-rgb), 0.1);" style="border-color: rgba(var(--color-primary-rgb), 0.2);">
+      <div class="flex items-center justify-between">
+        <div class="text-sm text-gray-400">
+          Mostrando 1 a 3 de 15 resultados
+        </div>
+        <div class="flex items-center gap-2">
+          <button class="px-3 py-1 text-sm rounded transition-colors duration-200" style="color: rgba(var(--color-primary-rgb), 0.8);" style="--tw-hover-bg-opacity: 0.3;" style="--tw-hover-bg-color: rgba(var(--color-primary-rgb), var(--tw-hover-bg-opacity));">
+            <span class="ph ph-caret-left"></span>
+          </button>
+          <button class="px-3 py-1 text-sm text-white rounded" style="background-color: var(--color-primary);">1</button>
+          <button class="px-3 py-1 text-sm rounded transition-colors duration-200" style="color: rgba(var(--color-primary-rgb), 0.8);" style="--tw-hover-bg-opacity: 0.3;" style="--tw-hover-bg-color: rgba(var(--color-primary-rgb), var(--tw-hover-bg-opacity));">2</button>
+          <button class="px-3 py-1 text-sm rounded transition-colors duration-200" style="color: rgba(var(--color-primary-rgb), 0.8);" style="--tw-hover-bg-opacity: 0.3;" style="--tw-hover-bg-color: rgba(var(--color-primary-rgb), var(--tw-hover-bg-opacity));">3</button>
+          <button class="px-3 py-1 text-sm rounded transition-colors duration-200" style="color: rgba(var(--color-primary-rgb), 0.8);" style="--tw-hover-bg-opacity: 0.3;" style="--tw-hover-bg-color: rgba(var(--color-primary-rgb), var(--tw-hover-bg-opacity));">4</button>
+          <button class="px-3 py-1 text-sm rounded transition-colors duration-200" style="color: rgba(var(--color-primary-rgb), 0.8);" style="--tw-hover-bg-opacity: 0.3;" style="--tw-hover-bg-color: rgba(var(--color-primary-rgb), var(--tw-hover-bg-opacity));">5</button>
+          <button class="px-3 py-1 text-sm rounded transition-colors duration-200" style="color: rgba(var(--color-primary-rgb), 0.8);" style="--tw-hover-bg-opacity: 0.3;" style="--tw-hover-bg-color: rgba(var(--color-primary-rgb), var(--tw-hover-bg-opacity));">
+            <span class="ph ph-caret-right"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>

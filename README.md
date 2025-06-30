@@ -1,10 +1,10 @@
-# 🎵 PurpleBox
+# 🎵 MagicBox
 
 Um dashboard musical moderno e interativo para centralização e análise de dados musicais em tempo real.
 
 ## 📋 Sobre o Projeto
 
-O **PurpleBox** é uma aplicação web desenvolvida em Angular que permite acompanhar as principais tendências musicais, artistas, músicas, gêneros e estatísticas do universo musical em diferentes regiões do mundo. 
+O **MagicBox** é uma aplicação web desenvolvida em Angular que permite acompanhar as principais tendências musicais, artistas, músicas, gêneros e estatísticas do universo musical em diferentes regiões do mundo. 
 
 ### ✨ Funcionalidades
 
@@ -47,8 +47,8 @@ Antes de começar, você precisa ter instalado no seu computador:
 ### 1. Clone o repositório
 
 ```bash
-git clone https://github.com/MatheusAnthonyPereiraAbreu/PurpleBox
-cd purplebox
+git clone https://github.com/MatheusAnthonyPereiraAbreu/MagicBox
+cd magicbox
 ```
 
 ### 2. Instale as dependências
@@ -69,7 +69,7 @@ O projeto estará disponível em `http://localhost:4200`
 
 ### Navegação
 
-O PurpleBox possui uma interface intuitiva com as seguintes seções:
+O MagicBox possui uma interface intuitiva com as seguintes seções:
 
 - **🏠 Home**: Dashboard principal com visão geral dos dados musicais
 - **📊 Relatórios**: Geração e visualização de relatórios detalhados
@@ -113,7 +113,7 @@ npm run watch
 ## 📁 Estrutura do Projeto
 
 ```
-PurpleBox/
+MagicBox/
 ├── src/
 │   ├── app/
 │   │   ├── components/
@@ -146,4 +146,4 @@ PurpleBox/
 - **Contribuidores**: [Augusto Zanoli, Alejandro de Paiva, Lucas Pinheiro, Matheus Anthony, Tomaz Lávez]
 
 
-**PurpleBox** - Transformando dados musicais em insights visuais 🎵
+**MagicBox** - Transformando dados musicais em insights visuais 🎵

@@ -1,6 +1,52 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Variável para o roxo padrão do projeto (usando Tailwind) */
+:root {
+  --color-primary: rgb(139, 92, 246); /* Roxo padrão */
+  --color-primary-dark: #6D28D9;
+  --color-primary-darker: #4A235A;
+  --color-primary-rgb: 139, 92, 246;
+}
+
+body.theme-purple {
+  --color-primary: rgb(139, 92, 246);
+  --color-primary-dark: #6D28D9;
+  --color-primary-darker: #4A235A;
+  --color-primary-rgb: 139, 92, 246;
+}
+body.theme-blue {
+  --color-primary: rgb(59, 130, 246);
+  --color-primary-dark: #2563eb;
+  --color-primary-darker: #1e3a8a;
+  --color-primary-rgb: 59, 130, 246;
+}
+body.theme-emerald {
+  --color-primary: rgb(16, 185, 129);
+  --color-primary-dark: #059669;
+  --color-primary-darker: #065f46;
+  --color-primary-rgb: 16, 185, 129;
+}
+body.theme-amber {
+  --color-primary: rgb(245, 158, 11);
+  --color-primary-dark: #d97706;
+  --color-primary-darker: #78350f;
+  --color-primary-rgb: 245, 158, 11;
+}
+body.theme-rose {
+  --color-primary: rgb(244, 63, 94);
+  --color-primary-dark: #e11d48;
+  --color-primary-darker: #881337;
+  --color-primary-rgb: 244, 63, 94;
+}
+body.theme-indigo {
+  --color-primary: rgb(99, 102, 241);
+  --color-primary-dark: #4f46e5;
+  --color-primary-darker: #312e81;
+  --color-primary-rgb: 99, 102, 241;
+}
+
 @layer components {
   .btn-primary {
     @apply px-4 py-2 bg-gradient-to-r from-primary-darker to-primary-dark 
@@ -12,51 +58,32 @@
   }
 
   .sidebar {
-    @apply fixed left-0 top-0 h-screen w-64 
-           text-white
-           shadow-xl
-           p-6
-           rounded-r-3xl
-           backdrop-blur-lg
-           bg-gradient-to-br
-           from-primary-dark to-[#2c2c2e]
-           border border-white/10;
-  
-    &-header {
-      @apply mb-8 border-b border-white/10 pb-4;
-    }
-  
-    &-link {
-      @apply flex items-center gap-3 py-2 px-4 
-             rounded-lg
-             text-white/80 
-             hover:bg-white/10
-             hover:text-white
-             transition-all duration-200
-             w-full;
-  
-      &.active {
-        @apply bg-white/20 text-white;
-      }
-    }
-  
-    &-section {
-      @apply mb-6
-      flex
-      flex-col
-      justify-center
-      items-center
-      w-full
-      gap-3;
-  
-      h3 {
-        @apply text-sm uppercase text-white/60 mb-2 px-4;
-      }
-    }
+    @apply fixed left-0 top-0 h-screen w-64 text-white shadow-lg p-6 rounded-r-3xl backdrop-blur-lg border border-inherit;
+    background: linear-gradient(135deg, #18181b 0%, #23232a 60%, #18181b 100%);
+    border-left: 8px solid var(--color-primary);
+    box-shadow: 0 4px 24px 0 rgba(0,0,0,0.25);
   }
   
+  .sidebar-header {
+    @apply mb-8 border-b border-white/10 pb-4;
+  }
   
+  .sidebar-link {
+    @apply flex items-center gap-3 py-2 px-4 rounded-lg text-white/80 hover:bg-white/10 hover:text-white transition-all duration-200 w-full;
+  }
   
+  .sidebar-link.active {
+    @apply bg-white/20 text-white;
+    border-left: 4px solid var(--color-primary);
+  }
+  
+  .sidebar-section {
+    @apply mb-6 flex flex-col justify-center items-center w-full gap-3;
+  }
+  
+  .sidebar-section h3 {
+    @apply text-sm uppercase text-white/60 mb-2 px-4;
+  }
 }
 
 @layer utilities {
@@ -128,4 +155,80 @@
 
 ::ng-deep .p-button {
   color: rgb(170, 170, 170) !important;
+}
+
+/* Utilitários para usar as variáveis CSS */
+.text-primary-dark {
+  color: var(--color-primary-dark) !important;
+}
+.bg-primary-dark {
+  background-color: var(--color-primary-dark) !important;
+}
+.bg-primary {
+  background-color: var(--color-primary) !important;
+}
+.bg-primary-darker {
+  background-color: var(--color-primary-darker) !important;
+}
+.border-primary-dark {
+  border-color: var(--color-primary-dark) !important;
+}
+
+.card-theme {
+  background: linear-gradient(135deg, var(--color-primary-dark) 0%, #1a1a1a 60%, #2c2c2e 100%);
+  border-left: 8px solid var(--color-primary);
+}
+
+input[type="checkbox"] {
+  position: relative;
+  cursor: pointer;
+  border-color: var(--color-primary) !important;
+  background-color: #18181b;
+  transition: all 0.2s;
+}
+input[type="checkbox"]:checked {
+  background-color: var(--color-primary) !important;
+  border-color: var(--color-primary) !important;
+}
+input[type="checkbox"]:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-primary-dark);
+}
+input[type="checkbox"]:checked::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 4px;
+  height: 8px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: translate(-50%, -60%) rotate(45deg);
+}
+
+.bg-theme-gradient {
+  background: linear-gradient(135deg, var(--color-primary-darker) 0%, #23232a 60%, #18181b 100%) !important;
+}
+
+.card-theme-light {
+  background-color: rgba(var(--color-primary-rgb), 0.08);
+  border-left: 8px solid rgba(var(--color-primary-rgb), 0.15);
+}
+
+/* Mantendo as classes antigas para compatibilidade, mas agora todas seguem o tema */
+.card-purple-light {
+  background-color: rgba(var(--color-primary-rgb), 0.08);
+  border-left: 8px solid rgba(var(--color-primary-rgb), 0.15);
+}
+.card-blue-light {
+  background-color: rgba(var(--color-primary-rgb), 0.08);
+  border-left: 8px solid rgba(var(--color-primary-rgb), 0.15);
+}
+.card-emerald-light {
+  background-color: rgba(var(--color-primary-rgb), 0.08);
+  border-left: 8px solid rgba(var(--color-primary-rgb), 0.15);
+}
+.card-indigo-light {
+  background-color: rgba(var(--color-primary-rgb), 0.08);
+  border-left: 8px solid rgba(var(--color-primary-rgb), 0.15);
 }

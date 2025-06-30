@@ -1,14 +1,14 @@
-<section class="p-6 w-full h-full transition-all duration-500 ease-in opacity-0 animate-fadein flex flex-col gap-8">
+<section class="p-6 w-full min-h-screen">
     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
         <div class="flex gap-10">
-            <img src="assets/icones/purplebox.png" alt="PurpleBox" class="w-20 h-20 justify-self-start"/> 
+            <img src="assets/icones/magicbox.png" alt="MagicBox" class="w-20 h-20 justify-self-start"/> 
             <div>
-                <h1 class="text-3xl font-bold text-text-dark mb-2">Bem-vindo ao PurpleBox</h1>
+                <h1 class="text-4xl font-extrabold text-transparent bg-clip-text mb-2" style="background-image: linear-gradient(to right, var(--color-primary), var(--color-primary-dark));">Bem-vindo ao MagicBox</h1>
                 <p class="text-gray-100 mb-4">Sua central de estatísticas musicais</p>
             </div>
         </div>
         <!-- Carrossel de Bandeiras -->
-        <div class="bg-gradient-to-br from-purple-500 via-[#1a1a1a] to-[#2c2c2e] rounded-lg border border-inherit border-l-8 border-primary-dark shadow-lg p-4 min-w-[350px]">
+        <div class="card-purple-light rounded-lg border border-inherit shadow-lg p-4 min-w-[350px]">
             <h2 class="text-lg font-semibold text-gray-200 mb-4 text-left">Países</h2>
             <p-carousel [value]="flags" [numVisible]="5" [circular]="true" [showIndicators]="false" [showNavigators]="true" styleClass="full-carousel">
                 <ng-template pTemplate="item" let-flag>
@@ -22,8 +22,8 @@
     </div>
 
     <!-- Gráficos de Pizza -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
-        <div class="col-span-1 bg-gradient-to-br from-purple-500 via-[#1a1a1a] to-[#2c2c2e] rounded-lg border border-inherit border-l-8 border-primary-dark shadow-lg p-4 flex flex-col items-center">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 w-full mt-8">
+        <div class="col-span-1 card-emerald-light rounded-lg border border-inherit shadow-lg p-4 flex flex-col items-center">
             <h2 class="text-lg font-semibold text-gray-200 mb-2">Artistas</h2>
             <ngx-charts-pie-chart
                 [view]="view"
@@ -34,7 +34,7 @@
                 class="w-full h-64">
             </ngx-charts-pie-chart>
         </div>
-        <div class="col-span-1 bg-gradient-to-br from-purple-500 via-[#1a1a1a] to-[#2c2c2e] rounded-lg border border-inherit border-l-8 border-primary-dark shadow-lg p-4 flex flex-col items-center">
+        <div class="col-span-1 card-blue-light rounded-lg border border-inherit shadow-lg p-4 flex flex-col items-center">
             <h2 class="text-lg font-semibold text-gray-200 mb-2">Músicas</h2>
             <ngx-charts-pie-chart
                 [view]="view"
@@ -45,7 +45,7 @@
                 class="w-full h-64">
             </ngx-charts-pie-chart>
         </div>
-        <div class="col-span-1 bg-gradient-to-br from-purple-500 via-[#1a1a1a] to-[#2c2c2e] rounded-lg border border-inherit border-l-8 border-primary-dark shadow-lg p-4 flex flex-col items-center">
+        <div class="col-span-1 card-indigo-light rounded-lg border border-inherit shadow-lg p-4 flex flex-col items-center">
             <h2 class="text-lg font-semibold text-gray-200 mb-2">Álbuns</h2>
             <ngx-charts-pie-chart
                 [view]="view"
@@ -59,7 +59,7 @@
     </div>
 
     <!-- Gráfico de Área -->
-    <div class="w-full bg-gradient-to-br from-purple-500 via-[#1a1a1a] to-[#2c2c2e] rounded-lg border border-inherit border-l-8 border-primary-dark shadow-lg p-4 flex flex-col items-center">
+    <div class="w-full card-purple-light rounded-lg border border-inherit shadow-lg p-4 flex flex-col items-center mt-8">
         <h2 class="text-lg font-semibold text-gray-200 mb-2">Gêneros</h2>
         <ngx-charts-area-chart
             [view]="viewArea"

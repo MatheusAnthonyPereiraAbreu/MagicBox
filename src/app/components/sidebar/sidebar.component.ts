@@ -6,7 +6,7 @@ import { RouterModule } from '@angular/router';
     template: `
         <nav class="sidebar">
             <div class="sidebar-header">
-                <h1 class="text-xl font-bold text-center">PurpleBox</h1>
+                <h1 class="text-xl font-bold text-center text-primary" style="color: var(--color-primary) !important;">MagicBox</h1>
             </div>
 
             <div class="sidebar-section gap-5">

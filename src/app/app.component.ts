@@ -6,7 +6,7 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
   selector: 'app-root',
   template: `
         <app-sidebar></app-sidebar>
-        <main class="ml-64 p-6">
+        <main class="ml-60 p-6 min-h-screen bg-[#18181b]">
             <router-outlet></router-outlet>
         </main>
     `,
