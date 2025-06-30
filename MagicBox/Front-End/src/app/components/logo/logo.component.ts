@@ -102,4 +102,9 @@ export class LogoComponent implements OnInit, OnDestroy {
   setSize(size: string) {
     this.logoClass = size;
   }
+
+  // Método para definir tamanho específico via CSS
+  setCustomSize(width: string, height: string) {
+    this.logoClass = `${width} ${height}`;
+  }
 } 
