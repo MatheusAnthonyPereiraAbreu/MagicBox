@@ -1,0 +1,148 @@
+<section class="p-6 w-full min-h-screen">
+  <div class="mb-8">
+    <div class="flex items-center gap-3 mb-6">
+      <img src="assets/icones/magicbox.png" alt="MagicBox" class="w-10 h-10"/>
+      <h1 class="text-4xl font-extrabold text-transparent bg-clip-text mb-2" style="background-image: linear-gradient(to right, var(--color-primary), var(--color-primary-dark));">Sobre o MagicBox</h1>
+    </div>
+    <p class="text-gray-100 mb-6 max-w-3xl text-lg leading-relaxed">
+      O <strong>MagicBox</strong> é um software de centralização musical, onde você pode acompanhar as principais
+      tendências, artistas, músicas, gêneros e estatísticas do universo musical em diferentes regiões do mundo. Descubra
+      o que está em alta, compare países e explore dados de forma visual e interativa!
+    </p>
+  </div>
+
+  <div>
+    <h2 class="text-2xl font-bold mb-6 flex items-center gap-2" style="color: var(--color-primary);">
+      <span class="ph ph-users"></span>
+      Criadores do Projeto
+    </h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div *ngFor="let item of users"
+        class="cursor-pointer flex flex-col items-center rounded-xl shadow-lg p-6 transition-all duration-300 hover:scale-105 hover:shadow-xl"
+        style="background-color: rgba(var(--color-primary-rgb), 0.08); border-left: 8px solid rgba(var(--color-primary-rgb), 0.25);"
+        (click)="openProfile(item.user?.html_url)">
+        <ng-container *ngIf="item.user; else loading">
+          <img [src]="item.user.avatar_url" [alt]="item.user.name"
+            class="w-24 h-24 rounded-full mb-4 border-4 object-cover transition-all duration-300 hover:border-opacity-80"
+            style="border-color: var(--color-primary);" />
+          <h3 class="text-lg font-bold text-white mb-2">{{ item.user.name || item.user.login }}</h3>
+          <span class="text-gray-300 mb-2 font-medium">{{ item.role }}</span>
+          <span class="text-sm mb-3 transition-all duration-200 hover:underline" style="color: var(--color-primary);">&#64;{{ item.user.login }}</span>
+          <p class="text-gray-400 text-sm text-center leading-relaxed" *ngIf="item.user.bio">{{ item.user.bio }}</p>
+          <p class="text-gray-500 text-xs mt-2 flex items-center gap-1" *ngIf="item.user.location">
+            <span class="ph ph-map-pin"></span>
+            {{ item.user.location }}
+          </p>
+        </ng-container>
+        <ng-template #loading>
+          <div class="w-24 h-24 rounded-full mb-4 bg-gray-700 animate-pulse"></div>
+          <div class="h-4 w-20 bg-gray-700 rounded mb-2 animate-pulse"></div>
+          <div class="h-3 w-16 bg-gray-700 rounded mb-1 animate-pulse"></div>
+          <div class="h-3 w-12 bg-gray-700 rounded animate-pulse"></div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+
+  <!-- Seção de Tecnologias -->
+  <div class="mt-12">
+    <h2 class="text-2xl font-bold mb-6 flex items-center gap-2" style="color: var(--color-primary);">
+      <span class="ph ph-gear"></span>
+      Tecnologias Utilizadas
+    </h2>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+      <div class="flex flex-col items-center p-4 rounded-lg transition-all duration-300 hover:scale-105"
+           style="background-color: rgba(var(--color-primary-rgb), 0.05); border: 1px solid rgba(var(--color-primary-rgb), 0.15);">
+        <div class="w-12 h-12 rounded-lg mb-3 flex items-center justify-center" style="background-color: rgba(var(--color-primary-rgb), 0.2);">
+          <span class="ph ph-brackets-curly text-xl" style="color: var(--color-primary);"></span>
+        </div>
+        <span class="text-white font-medium text-sm">Angular 19</span>
+      </div>
+      
+      <div class="flex flex-col items-center p-4 rounded-lg transition-all duration-300 hover:scale-105"
+           style="background-color: rgba(var(--color-primary-rgb), 0.05); border: 1px solid rgba(var(--color-primary-rgb), 0.15);">
+        <div class="w-12 h-12 rounded-lg mb-3 flex items-center justify-center" style="background-color: rgba(var(--color-primary-rgb), 0.2);">
+          <span class="ph ph-palette text-xl" style="color: var(--color-primary);"></span>
+        </div>
+        <span class="text-white font-medium text-sm">Tailwind CSS</span>
+      </div>
+      
+      <div class="flex flex-col items-center p-4 rounded-lg transition-all duration-300 hover:scale-105"
+           style="background-color: rgba(var(--color-primary-rgb), 0.05); border: 1px solid rgba(var(--color-primary-rgb), 0.15);">
+        <div class="w-12 h-12 rounded-lg mb-3 flex items-center justify-center" style="background-color: rgba(var(--color-primary-rgb), 0.2);">
+          <span class="ph ph-chart-line text-xl" style="color: var(--color-primary);"></span>
+        </div>
+        <span class="text-white font-medium text-sm">NgxCharts</span>
+      </div>
+      
+      <div class="flex flex-col items-center p-4 rounded-lg transition-all duration-300 hover:scale-105"
+           style="background-color: rgba(var(--color-primary-rgb), 0.05); border: 1px solid rgba(var(--color-primary-rgb), 0.15);">
+        <div class="w-12 h-12 rounded-lg mb-3 flex items-center justify-center" style="background-color: rgba(var(--color-primary-rgb), 0.2);">
+          <span class="ph ph-cube text-xl" style="color: var(--color-primary);"></span>
+        </div>
+        <span class="text-white font-medium text-sm">PrimeNG</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Seção de Funcionalidades -->
+  <div class="mt-12">
+    <h2 class="text-2xl font-bold mb-6 flex items-center gap-2" style="color: var(--color-primary);">
+      <span class="ph ph-star"></span>
+      Funcionalidades Principais
+    </h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="p-6 rounded-xl transition-all duration-300 hover:scale-105"
+           style="background-color: rgba(var(--color-primary-rgb), 0.08); border-left: 8px solid rgba(var(--color-primary-rgb), 0.25);">
+        <div class="flex items-center gap-3 mb-3">
+          <div class="w-10 h-10 rounded-lg flex items-center justify-center" style="background-color: rgba(var(--color-primary-rgb), 0.2);">
+            <span class="ph ph-chart-pie text-lg" style="color: var(--color-primary);"></span>
+          </div>
+          <h3 class="text-lg font-bold text-white">Dashboard Interativo</h3>
+        </div>
+        <p class="text-gray-300 text-sm leading-relaxed">
+          Visualize tendências musicais através de gráficos dinâmicos e interativos, com dados em tempo real de diferentes regiões do mundo.
+        </p>
+      </div>
+      
+      <div class="p-6 rounded-xl transition-all duration-300 hover:scale-105"
+           style="background-color: rgba(var(--color-primary-rgb), 0.08); border-left: 8px solid rgba(var(--color-primary-rgb), 0.25);">
+        <div class="flex items-center gap-3 mb-3">
+          <div class="w-10 h-10 rounded-lg flex items-center justify-center" style="background-color: rgba(var(--color-primary-rgb), 0.2);">
+            <span class="ph ph-file-text text-lg" style="color: var(--color-primary);"></span>
+          </div>
+          <h3 class="text-lg font-bold text-white">Relatórios Personalizados</h3>
+        </div>
+        <p class="text-gray-300 text-sm leading-relaxed">
+          Crie relatórios Ad hoc personalizados com filtros avançados, agrupamentos e exportação de dados para análise detalhada.
+        </p>
+      </div>
+      
+      <div class="p-6 rounded-xl transition-all duration-300 hover:scale-105"
+           style="background-color: rgba(var(--color-primary-rgb), 0.08); border-left: 8px solid rgba(var(--color-primary-rgb), 0.25);">
+        <div class="flex items-center gap-3 mb-3">
+          <div class="w-10 h-10 rounded-lg flex items-center justify-center" style="background-color: rgba(var(--color-primary-rgb), 0.2);">
+            <span class="ph ph-palette text-lg" style="color: var(--color-primary);"></span>
+          </div>
+          <h3 class="text-lg font-bold text-white">Temas Dinâmicos</h3>
+        </div>
+        <p class="text-gray-300 text-sm leading-relaxed">
+          Personalize a interface com temas dinâmicos em 6 cores diferentes: roxo, azul, verde, âmbar, rosa e índigo.
+        </p>
+      </div>
+      
+      <div class="p-6 rounded-xl transition-all duration-300 hover:scale-105"
+           style="background-color: rgba(var(--color-primary-rgb), 0.08); border-left: 8px solid rgba(var(--color-primary-rgb), 0.25);">
+        <div class="flex items-center gap-3 mb-3">
+          <div class="w-10 h-10 rounded-lg flex items-center justify-center" style="background-color: rgba(var(--color-primary-rgb), 0.2);">
+            <span class="ph ph-devices text-lg" style="color: var(--color-primary);"></span>
+          </div>
+          <h3 class="text-lg font-bold text-white">Design Responsivo</h3>
+        </div>
+        <p class="text-gray-300 text-sm leading-relaxed">
+          Interface totalmente responsiva que se adapta perfeitamente a qualquer dispositivo, desde smartphones até desktops.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
