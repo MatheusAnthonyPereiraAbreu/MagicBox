@@ -1,0 +1,82 @@
+<section class="p-6 w-full h-full transition-all duration-500 ease-in opacity-0 animate-fadein">
+    <h1 class="text-3xl font-bold text-text-dark mb-4">Relatório Adock</h1>
+    <div class="grid grid-cols-5 w-full max-h-screen h-[calc(100vh-10rem)] gap-x-5 gap-y-5">
+        <!-- Filtros -->
+        <div
+            class="bg-gradient-to-br from-purple-500 via-[#1a1a1a] to-[#2c2c2e] rounded-lg border border-inherit border-l-8 border-primary-dark col-span-2 w-full h-full shadow-lg p-6 flex flex-col gap-4">
+            <h2 class="text-xl font-semibold text-gray-200 mb-2">Filtros</h2>
+            <label class="text-gray-300 text-sm">Data Inicial
+                <input type="date"
+                    class="mt-1 w-full rounded bg-white/10 text-gray-100 p-2 border border-white/10 focus:outline-none focus:ring-2 focus:ring-primary-light" />
+            </label>
+            <label class="text-gray-300 text-sm">Data Final
+                <input type="date"
+                    class="mt-1 w-full rounded bg-white/10 text-gray-100 p-2 border border-white/10 focus:outline-none focus:ring-2 focus:ring-primary-light" />
+            </label>
+            <label class="text-gray-300 text-sm">Categoria
+                <select
+                    class="mt-1 w-full rounded bg-white/10 text-gray-100 p-2 border border-white/10 focus:outline-none focus:ring-2 focus:ring-primary-light">
+                    <option value="">Todas</option>
+                    <option value="cat1">Categoria 1</option>
+                    <option value="cat2">Categoria 2</option>
+                </select>
+            </label>
+            <button class="btn-primary w-full mt-4">Gerar Relatório</button>
+        </div>
+        <!-- Gráficos -->
+        <div
+            class="bg-gradient-to-br from-purple-500 via-[#1a1a1a] to-[#2c2c2e] rounded-lg border border-inherit border-l-8 border-primary-dark col-span-3 w-full h-full shadow-lg p-6 flex flex-col gap-4">
+            <h2 class="text-xl font-semibold text-gray-200 mb-2">Gráficos Dinâmicos</h2>
+            <div class="w-full h-full flex flex-col gap-4 justify-center items-center">
+                <div class="w-full h-full">
+                    <p-carousel [value]="[0,1,2,3]" [numVisible]="1" [circular]="true" [showIndicators]="true" [showNavigators]="true" styleClass="full-carousel">
+                        <ng-template pTemplate="item" let-item>
+                            <div style="height:100%;display:flex;align-items:center;justify-content:center;width:100%;">
+                                <div class="w-full h-full flex flex-col items-center justify-center">
+                                    <h3 class="text-lg text-gray-200 mb-2">
+                                        <span *ngIf="item === 0">Gráfico de Pizza</span>
+                                        <span *ngIf="item === 1">Gráfico de Barras</span>
+                                        <span *ngIf="item === 2">Gráfico de Linha</span>
+                                        <span *ngIf="item === 3">Gráfico de Área</span>
+                                    </h3>
+                                    <ngx-charts-pie-chart *ngIf="item === 0"
+                                        [view]="view"
+                                        [scheme]="colorScheme"
+                                        [results]="pieData"
+                                        [legend]="true"
+                                        [labels]="true"
+                                        [doughnut]="false"
+                                        [explodeSlices]="false"
+                                        class="w-full h-full">
+                                    </ngx-charts-pie-chart>
+                                    <ngx-charts-bar-vertical *ngIf="item === 1"
+                                        [view]="view"
+                                        [scheme]="colorScheme"
+                                        [results]="barData"
+                                        [legend]="true"
+                                        class="w-full h-full">
+                                    </ngx-charts-bar-vertical>
+                                    <ngx-charts-line-chart *ngIf="item === 2"
+                                        [view]="view"
+                                        [scheme]="colorScheme"
+                                        [results]="lineData"
+                                        [legend]="true"
+                                        class="w-full h-full">
+                                    </ngx-charts-line-chart>
+                                    <ngx-charts-area-chart *ngIf="item === 3"
+                                        [view]="view"
+                                        [scheme]="colorScheme"
+                                        [results]="areaData"
+                                        [legend]="true"
+                                        class="w-full h-full">
+                                    </ngx-charts-area-chart>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </p-carousel>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
