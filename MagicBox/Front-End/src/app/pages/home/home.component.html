@@ -1,72 +1,120 @@
-<section class="p-6 w-full min-h-screen">
-    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-        <div class="flex gap-10">
+<section class="dashboard-home-wrapper">
+  <!-- Topo minimalista em Tailwind: logo + nome + stats + países lado a lado -->
+  <div
+    class="w-full max-w-3xl mx-auto mb-8 rounded-2xl shadow-lg p-10 flex flex-col items-center justify-center transition-all duration-300 hover:scale-[1.01]"
+    style="background-color: rgba(var(--color-primary-rgb), 0.08); border-left: 8px solid rgba(var(--color-primary-rgb), 0.15);"
+  >
+    <div class="flex flex-col items-center justify-center gap-8 w-full">
+      <!-- Logo + Nome + Stats -->
+      <div class="flex flex-col items-center gap-6 w-full">
+        <div class="flex flex-col items-center justify-center gap-2 w-full">
+          <div class="flex items-center justify-center gap-6 w-full">
             <app-logo></app-logo>
-            <div>
-                <h1 class="text-4xl font-extrabold text-transparent bg-clip-text mb-2" style="background-image: linear-gradient(to right, var(--color-primary), var(--color-primary-dark));">Bem-vindo ao MagicBox</h1>
-                <p class="text-gray-100 mb-4">Sua central de estatísticas musicais</p>
+            <span class="text-5xl font-extrabold align-middle text-center" style="color: var(--color-primary); line-height: 1;">MagicBox</span>
+          </div>
+        </div>
+        
+      </div>
+
+      <!-- Países -->
+      <div class="flex flex-col items-center w-full max-w-[420px]">
+        <h2 class="text-base font-semibold text-gray-300 mb-2 text-center" style="color: var(--color-primary);">Países</h2>
+        <p-carousel
+          [value]="flags"
+          [numVisible]="4"
+          [circular]="true"
+          [showIndicators]="false"
+          [showNavigators]="true"
+          styleClass="w-full"
+        >
+          <ng-template pTemplate="item" let-flag>
+            <div class="flex flex-col items-center cursor-pointer select-none"
+                 (click)="onSelectCountry(flag.name)">
+              <img
+                [src]="flag.img"
+                [alt]="flag.name"
+                class="object-cover rounded shadow transition-all duration-300"
+                [ngClass]="{
+                  'w-20 h-14  scale-110 z-10': selectedCountry === flag.name,
+                  'w-16 h-12 opacity-80': selectedCountry !== flag.name
+                }"
+                style="background: #fff;"
+              />
+              <span class="mt-2 transition-all duration-300 text-center"
+                    [ngStyle]="selectedCountry === flag.name ? {'color': 'var(--color-primary)', 'fontWeight': 'bold', 'fontSize': '1.1rem'} : {'color': '#a3a3a3', 'fontSize': '0.95rem'}">
+                {{ flag.name }}
+              </span>
             </div>
-        </div>
-        <!-- Carrossel de Bandeiras -->
-        <div class="card-purple-light rounded-lg border border-inherit shadow-lg p-4 min-w-[350px]">
-            <h2 class="text-lg font-semibold text-gray-200 mb-4 text-left">Países</h2>
-            <p-carousel [value]="flags" [numVisible]="5" [circular]="true" [showIndicators]="false" [showNavigators]="true" styleClass="full-carousel">
-                <ng-template pTemplate="item" let-flag>
-                    <div class="flex flex-col items-center justify-center p-2">
-                        <img [src]="flag.img" [alt]="flag.name" class="w-16 h-10 object-cover rounded shadow-md border border-gray-400 mb-2 cursor-pointer" />
-                        <span class="text-gray-200 text-sm">{{ flag.name }}</span>
-                    </div>
-                </ng-template>
-            </p-carousel>
-        </div>
+          </ng-template>
+        </p-carousel>
+      </div>
     </div>
+  </div>
 
-    <!-- Gráficos de Pizza -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 w-full mt-8">
-        <div class="col-span-1 card-emerald-light rounded-lg border border-inherit shadow-lg p-4 flex flex-col items-center">
-            <h2 class="text-lg font-semibold text-gray-200 mb-2">Artistas</h2>
-            <ngx-charts-pie-chart
-                [view]="view"
-                [scheme]="colorScheme"
-                [results]="artistasData"
-                [legend]="true"
-                [labels]="true"
-                class="w-full h-64">
-            </ngx-charts-pie-chart>
-        </div>
-        <div class="col-span-1 card-blue-light rounded-lg border border-inherit shadow-lg p-4 flex flex-col items-center">
-            <h2 class="text-lg font-semibold text-gray-200 mb-2">Músicas</h2>
-            <ngx-charts-pie-chart
-                [view]="view"
-                [scheme]="colorScheme"
-                [results]="musicasData"
-                [legend]="true"
-                [labels]="true"
-                class="w-full h-64">
-            </ngx-charts-pie-chart>
-        </div>
-        <div class="col-span-1 card-indigo-light rounded-lg border border-inherit shadow-lg p-4 flex flex-col items-center">
-            <h2 class="text-lg font-semibold text-gray-200 mb-2">Álbuns</h2>
-            <ngx-charts-pie-chart
-                [view]="view"
-                [scheme]="colorScheme"
-                [results]="albunsData"
-                [legend]="true"
-                [labels]="true"
-                class="w-full h-64">
-            </ngx-charts-pie-chart>
-        </div>
+  <!-- Grid de gráficos -->
+  <div class="dashboard-graphics-grid">
+    <div class="dashboard-graphic-card"
+         style="background: rgba(var(--color-primary-rgb), 0.08); border-left: 8px solid rgba(var(--color-primary-rgb), 0.15); box-shadow: 0 4px 24px 0 rgba(0,0,0,0.12); border-radius: 1rem; padding: 2rem 1.5rem 1.5rem 1.5rem; min-height: 340px; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: box-shadow 0.2s, transform 0.2s;" 
+         onmouseover="this.style.boxShadow='0 8px 25px rgba(0,0,0,0.18)'; this.style.transform='translateY(-2px)';" 
+         onmouseout="this.style.boxShadow='0 4px 24px 0 rgba(0,0,0,0.12)'; this.style.transform='none';">
+      <h3 class="dashboard-graphic-title" style="font-size: 1.25rem; font-weight: 700; color: var(--color-primary, #c7d2fe); margin-bottom: 1rem; text-align: center; letter-spacing: 0.01em;">Artistas</h3>
+      <ngx-charts-pie-chart
+        [view]="chartView"
+        [scheme]="colorScheme"
+        [results]="artistasData"
+        [legend]="true"
+        [labels]="true"
+        class="w-full"
+        [style.height.px]="chartHeight">
+      </ngx-charts-pie-chart>
     </div>
-
-    <!-- Gráfico de Área -->
-    <div class="w-full card-purple-light rounded-lg border border-inherit shadow-lg p-4 flex flex-col items-center mt-8">
-        <h2 class="text-lg font-semibold text-gray-200 mb-2">Gêneros</h2>
-        <ngx-charts-area-chart
-            [view]="viewArea"
-            [scheme]="colorScheme"
-            [results]="generosData"
-            [legend]="true"
-            class="w-full h-64">
-        </ngx-charts-area-chart>
+    <div class="dashboard-graphic-card"
+         style="background: rgba(var(--color-primary-rgb), 0.08); border-left: 8px solid rgba(var(--color-primary-rgb), 0.15); box-shadow: 0 4px 24px 0 rgba(0,0,0,0.12); border-radius: 1rem; padding: 2rem 1.5rem 1.5rem 1.5rem; min-height: 340px; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: box-shadow 0.2s, transform 0.2s;" 
+         onmouseover="this.style.boxShadow='0 8px 25px rgba(0,0,0,0.18)'; this.style.transform='translateY(-2px)';" 
+         onmouseout="this.style.boxShadow='0 4px 24px 0 rgba(0,0,0,0.12)'; this.style.transform='none';">
+      <h3 class="dashboard-graphic-title" style="font-size: 1.25rem; font-weight: 700; color: var(--color-primary, #c7d2fe); margin-bottom: 1rem; text-align: center; letter-spacing: 0.01em;">Músicas</h3>
+      <ngx-charts-pie-chart
+        [view]="chartView"
+        [scheme]="colorScheme"
+        [results]="musicasData"
+        [legend]="true"
+        [labels]="true"
+        class="w-full"
+        [style.height.px]="chartHeight">
+      </ngx-charts-pie-chart>
     </div>
+    <div class="dashboard-graphic-card"
+         style="background: rgba(var(--color-primary-rgb), 0.08); border-left: 8px solid rgba(var(--color-primary-rgb), 0.15); box-shadow: 0 4px 24px 0 rgba(0,0,0,0.12); border-radius: 1rem; padding: 2rem 1.5rem 1.5rem 1.5rem; min-height: 340px; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: box-shadow 0.2s, transform 0.2s;" 
+         onmouseover="this.style.boxShadow='0 8px 25px rgba(0,0,0,0.18)'; this.style.transform='translateY(-2px)';" 
+         onmouseout="this.style.boxShadow='0 4px 24px 0 rgba(0,0,0,0.12)'; this.style.transform='none';">
+      <h3 class="dashboard-graphic-title" style="font-size: 1.25rem; font-weight: 700; color: var(--color-primary, #c7d2fe); margin-bottom: 1rem; text-align: center; letter-spacing: 0.01em;">Álbuns</h3>
+      <ngx-charts-pie-chart
+        [view]="chartView"
+        [scheme]="colorScheme"
+        [results]="albunsData"
+        [legend]="true"
+        [labels]="true"
+        class="w-full"
+        [style.height.px]="chartHeight">
+      </ngx-charts-pie-chart>
+    </div>
+    <div class="dashboard-graphic-card dashboard-graphic-area"
+         style="background: rgba(var(--color-primary-rgb), 0.08); border-left: 8px solid rgba(var(--color-primary-rgb), 0.15); box-shadow: 0 4px 24px 0 rgba(0,0,0,0.12); border-radius: 1rem; padding: 2rem 1.5rem 1.5rem 1.5rem; min-height: 340px; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: box-shadow 0.2s, transform 0.2s;" 
+         onmouseover="this.style.boxShadow='0 8px 25px rgba(0,0,0,0.18)'; this.style.transform='translateY(-2px)';" 
+         onmouseout="this.style.boxShadow='0 4px 24px 0 rgba(0,0,0,0.12)'; this.style.transform='none';">
+      <h3 class="dashboard-graphic-title" style="font-size: 1.25rem; font-weight: 700; color: var(--color-primary, #c7d2fe); margin-bottom: 1rem; text-align: center; letter-spacing: 0.01em;">Gêneros</h3>
+      <ngx-charts-area-chart
+        [view]="areaChartView"
+        [scheme]="colorScheme"
+        [results]="generosData"
+        [legend]="true"
+        [xAxis]="true"
+        [yAxis]="true"
+        [timeline]="true"
+        [autoScale]="true"
+        class="w-full"
+        [style.height.px]="areaChartHeight">
+      </ngx-charts-area-chart>
+    </div>
+  </div>
 </section>

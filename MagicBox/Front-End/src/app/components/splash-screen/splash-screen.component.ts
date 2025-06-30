@@ -7,10 +7,12 @@ import { LogoComponent } from '../logo/logo.component';
   template: `
     <div class="splash-screen" [class.fade-out]="isFadingOut">
       <div class="splash-content">
-        <div class="logo-container">
-          <app-logo></app-logo>
+        <div class="logo-title-row">
+          <div class="logo-container">
+            <app-logo></app-logo>
+          </div>
+          <h1 class="app-title">MagicBox</h1>
         </div>
-        <h1 class="app-title">MagicBox</h1>
         <p class="app-subtitle">Sua central de estatísticas musicais</p>
       </div>
     </div>
@@ -38,29 +40,47 @@ import { LogoComponent } from '../logo/logo.component';
     .splash-content {
       text-align: center;
       animation: fadeInUp 1s ease-out;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo-title-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.2rem;
+      margin-bottom: 1.2rem;
     }
 
     .logo-container {
-      margin-bottom: 2rem;
       animation: logoFloat 3s ease-in-out infinite;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .logo-container app-logo {
-      width: 120px !important;
-      height: 120px !important;
+      width: 80px !important;
+      height: 80px !important;
       display: block;
-      margin: 0 auto;
+      margin: 0;
     }
 
     .app-title {
       font-size: 3.5rem;
       font-weight: 900;
-      margin-bottom: 1rem;
       background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
       animation: titleGlow 2s ease-in-out infinite alternate;
+      margin: 0;
+      padding: 0;
+      line-height: 1;
+      display: flex;
+      align-items: center;
     }
 
     .app-subtitle {
@@ -69,6 +89,7 @@ import { LogoComponent } from '../logo/logo.component';
       font-weight: 300;
       opacity: 0.8;
       animation: subtitleFade 2s ease-in-out infinite alternate;
+      margin-top: 0.5rem;
     }
 
     @keyframes fadeInUp {
@@ -111,15 +132,18 @@ import { LogoComponent } from '../logo/logo.component';
 
     /* Responsividade */
     @media (max-width: 768px) {
+      .logo-title-row {
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+      }
       .logo-container app-logo {
-        width: 80px !important;
-        height: 80px !important;
+        width: 60px !important;
+        height: 60px !important;
       }
-      
       .app-title {
-        font-size: 2.5rem;
+        font-size: 2.2rem;
       }
-      
       .app-subtitle {
         font-size: 1rem;
       }

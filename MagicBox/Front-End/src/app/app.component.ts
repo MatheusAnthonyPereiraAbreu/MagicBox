@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
     
     <div *ngIf="!showSplash" class="app-content">
       <app-sidebar></app-sidebar>
-      <main class="ml-60 p-6 min-h-screen bg-[#18181b]">
+      <main class="main-content p-6 min-h-screen bg-[#18181b]">
         <router-outlet></router-outlet>
       </main>
     </div>
@@ -19,6 +19,30 @@ import { CommonModule } from '@angular/common';
   styles: [`
     .app-content {
       animation: fadeIn 0.5s ease-out;
+    }
+    
+    .main-content {
+      margin-left: 16rem; /* 256px - largura padrão da sidebar */
+      transition: margin-left 0.3s ease-in-out;
+    }
+    
+    /* Responsividade para o main content */
+    @media (max-width: 1024px) {
+      .main-content {
+        margin-left: 5rem; /* 80px - largura colapsada da sidebar */
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .main-content {
+        margin-left: 4rem; /* 64px */
+      }
+    }
+    
+    @media (max-width: 640px) {
+      .main-content {
+        margin-left: 3.5rem; /* 56px */
+      }
     }
     
     @keyframes fadeIn {
