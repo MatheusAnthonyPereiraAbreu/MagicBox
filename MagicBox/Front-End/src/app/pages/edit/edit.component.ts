@@ -21,18 +21,12 @@ export class EditComponent implements OnInit {
   selectedTheme = 'purple';
 
   ngOnInit() {
-    const saved = localStorage.getItem('pb-theme');
-    if (saved && this.themes.some(t => t.key === saved)) {
-      this.selectedTheme = saved;
-      this.applyTheme(saved);
-    } else {
-      this.applyTheme(this.selectedTheme);
-    }
+    // Aplicar tema padrão ao inicializar
+    this.applyTheme(this.selectedTheme);
   }
 
   setTheme(theme: string) {
     this.selectedTheme = theme;
-    localStorage.setItem('pb-theme', theme);
     this.applyTheme(theme);
   }
 
@@ -40,5 +34,11 @@ export class EditComponent implements OnInit {
     const body = document.body;
     this.themes.forEach(t => body.classList.remove('theme-' + t.key));
     body.classList.add('theme-' + theme);
+
+    // Disparar evento customizado para notificar outros componentes
+    const themeChangeEvent = new CustomEvent('themeChanged', {
+      detail: { theme: theme }
+    });
+    window.dispatchEvent(themeChangeEvent);
   }
 }

@@ -232,3 +232,39 @@ input[type="checkbox"]:checked::after {
   background-color: rgba(var(--color-primary-rgb), 0.08);
   border-left: 8px solid rgba(var(--color-primary-rgb), 0.15);
 }
+
+/* Estilos para o SVG com tema dinâmico */
+img[src*="magicbox-theme.svg"] {
+  filter: none; /* Remove qualquer filtro que possa interferir */
+}
+
+/* Garantir que o SVG use as variáveis CSS corretamente */
+svg .magicbox-fill {
+  fill: var(--color-primary, #8B5CF6) !important;
+  transition: fill 0.3s ease;
+}
+
+/* Estilos específicos para cada tema no SVG */
+body.theme-purple svg .magicbox-fill {
+  fill: rgb(139, 92, 246) !important;
+}
+
+body.theme-blue svg .magicbox-fill {
+  fill: rgb(59, 130, 246) !important;
+}
+
+body.theme-emerald svg .magicbox-fill {
+  fill: rgb(16, 185, 129) !important;
+}
+
+body.theme-amber svg .magicbox-fill {
+  fill: rgb(245, 158, 11) !important;
+}
+
+body.theme-rose svg .magicbox-fill {
+  fill: rgb(244, 63, 94) !important;
+}
+
+body.theme-indigo svg .magicbox-fill {
+  fill: rgb(99, 102, 241) !important;
+}

@@ -2,13 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { AboutService, GithubUser } from './about.service';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import { LogoComponent } from '../../components/logo/logo.component';
 
 @Component({
   selector: 'app-about',
   templateUrl: './about.component.html',
   styleUrls: ['./about.component.scss'],
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, LogoComponent],
   providers: [AboutService]
 })
 export class AboutComponent implements OnInit {

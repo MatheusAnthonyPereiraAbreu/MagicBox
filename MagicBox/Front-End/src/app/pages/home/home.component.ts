@@ -1,14 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { CarouselModule } from 'primeng/carousel';
+import { LogoComponent } from '../../components/logo/logo.component';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   standalone: true,
-  imports: [NgxChartsModule, CarouselModule]
+  imports: [CommonModule, NgxChartsModule, CarouselModule, LogoComponent]
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
   // Bandeiras dos países (exemplo)
   flags = [
     { name: 'Brasil', img: 'https://flagcdn.com/br.svg' },
@@ -85,4 +87,8 @@ export class HomeComponent {
   colorScheme = 'cool';
   view: [number, number] = [400, 250];
   viewArea: [number, number] = [1480, 265];
+
+  ngOnInit() {
+    // Additional initialization logic if needed
+  }
 }
