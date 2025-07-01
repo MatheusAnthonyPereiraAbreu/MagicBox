@@ -6,6 +6,7 @@ import com.magicbox.backend.service.RelatorioService;
 import com.magicbox.backend.service.AdHocService;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,8 +35,7 @@ public class RelatorioController {
     /**
      * Gera um relatório personalizado (ad-hoc) com base nos parâmetros enviados no corpo da requisição.
      */
-    @PostMapping("/ad-hoc")
-    @ResponseBody
+    @PostMapping(value = "/ad-hoc", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public Object gerarRelatorio(@RequestBody AdHocDTO request) {
         return adHocService.gerarRelatorio(request);

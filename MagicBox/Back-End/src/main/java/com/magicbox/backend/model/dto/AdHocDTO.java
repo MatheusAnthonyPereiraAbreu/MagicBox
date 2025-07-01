@@ -1,8 +1,8 @@
-package com.purplebox.backend.model.dto;
+package com.magicbox.backend.model.dto;
 
 import java.util.Set;
 
-import com.purplebox.backend.model.dto.table.Table;
+import com.magicbox.backend.model.dto.table.Table;
 
 // DTO que representa a requisição para geração de relatórios ad-hoc (dinâmicos).
 public record AdHocDTO(
