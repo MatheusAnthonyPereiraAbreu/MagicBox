@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+// Controlador responsável pelos endpoints de relatórios da aplicação.
 @RestController
 @RequestMapping("/api/relatorios")
 public class RelatorioController {
@@ -22,11 +23,17 @@ public class RelatorioController {
         this.adHocService = adHocService;
     }
 
+    /**
+     * Retorna o ranking das músicas mais tocadas por país.
+     */
     @GetMapping("/top-musicas")
     public List<TopMusicaDTO> getTopMusicasPorPais() {
         return relatorioService.buscarTopMusicas();
     }
 
+    /**
+     * Gera um relatório personalizado (ad-hoc) com base nos parâmetros enviados no corpo da requisição.
+     */
     @PostMapping("/ad-hoc")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)

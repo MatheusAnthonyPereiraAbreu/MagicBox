@@ -11,13 +11,16 @@ import com.magicbox.backend.model.dto.select.Select;
 import com.magicbox.backend.model.dto.table.Table;
 import com.magicbox.backend.model.dto.where.Operator;
 
+// Deserializador customizado para objetos WhereDTO a partir de JSON.
 public class WhereDeserializer extends GenericDeserializer<WhereDTO> {
 
     public WhereDeserializer() {
-
         super(WhereDTO.class);
     }
 
+    /**
+     * Realiza a desserialização de um objeto WhereDTO a partir de um JSON.
+     */
     @Override
     public WhereDTO deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
 

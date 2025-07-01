@@ -11,13 +11,16 @@ import com.magicbox.backend.model.dto.aggregation.Aggregation;
 import com.magicbox.backend.model.dto.select.Select;
 import com.magicbox.backend.model.dto.table.Table;
 
+// Deserializador customizado para objetos AggregationDTO a partir de JSON.
 public class AggregationDeserializer extends GenericDeserializer<AggregationDTO> {
 
     public AggregationDeserializer() {
-
         super(AggregationDTO.class);
     }
 
+    /**
+     * Realiza a desserialização de um objeto AggregationDTO a partir de um JSON.
+     */
     @Override
     public AggregationDTO deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
 

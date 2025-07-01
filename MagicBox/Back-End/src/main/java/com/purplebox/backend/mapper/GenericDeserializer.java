@@ -8,6 +8,7 @@ import com.magicbox.backend.model.dto.table.Table;
 
 import java.io.IOException;
 
+// Classe base abstrata para deserializadores customizados de DTOs.
 public abstract class GenericDeserializer<T> extends StdDeserializer<T> {
 
     public Class<T> clazz;
@@ -16,11 +17,17 @@ public abstract class GenericDeserializer<T> extends StdDeserializer<T> {
         super(clazz);
     }
 
+    /**
+     * Método abstrato de desserialização, implementado nas subclasses.
+     */
     @Override
     public T deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
         return null; // Implementado nas subclasses
     }
 
+    /**
+     * Converte o nome do campo em um enum Select correspondente à tabela.
+     */
     protected Select convertField(Table table, String fieldStr) {
         return switch (table) {
             case ARTISTA -> ArtistaSelect.valueOf(fieldStr);

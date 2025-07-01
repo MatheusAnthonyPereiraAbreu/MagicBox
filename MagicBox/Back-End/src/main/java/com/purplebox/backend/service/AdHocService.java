@@ -14,6 +14,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+// Serviço responsável por gerar relatórios personalizados (ad-hoc) de acordo com parâmetros dinâmicos enviados pelo usuário.
 public class AdHocService {
 
     private final EntityManager entityManager;
@@ -22,6 +23,9 @@ public class AdHocService {
         this.entityManager = entityManager;
     }
 
+    /**
+     * Gera um relatório dinâmico baseado nos parâmetros enviados no AdHocDTO.
+     */
     public Object gerarRelatorio(AdHocDTO request) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Tuple> query = cb.createTupleQuery();
@@ -52,6 +56,9 @@ public class AdHocService {
         return mapResultsToFriendlyFormat(resultList);
     }
 
+    /**
+     * Prepara as instruções de group by e seleção para consultas agregadas.
+     */
     private void prepareGroupByStatements(GroupByDTO groupBy, Map<Table, From<?, ?>> joins, CriteriaQuery<Tuple> query,
             CriteriaBuilder cb) {
         List<Selection<Object>> groupByList = prepareSelectStatements(groupBy.columnSet(), joins, cb);
@@ -67,6 +74,9 @@ public class AdHocService {
         query.multiselect(selections);
     }
 
+    /**
+     * Prepara a seleção de campos agregados (SUM, AVG, COUNT, etc).
+     */
     private Selection<?> prepareAggregation(AggregationDTO aggregation, Map<Table, From<?, ?>> joins,
             CriteriaBuilder cb) {
         Table table = aggregation.table();
@@ -87,6 +97,9 @@ public class AdHocService {
         };
     }
 
+    /**
+     * Mapeia o resultado da consulta para um formato amigável (lista de mapas).
+     */
     private static List<Map<String, Object>> mapResultsToFriendlyFormat(List<Tuple> resultList) {
 
         return resultList
@@ -100,6 +113,9 @@ public class AdHocService {
                 }).toList();
     }
 
+    /**
+     * Prepara os filtros (where) da consulta.
+     */
     private List<Predicate> prepareWhereStatements(Set<WhereDTO> whereSet, Map<Table, From<?, ?>> joins,
             CriteriaBuilder cb) {
         List<Predicate> predicates = new ArrayList<>();
@@ -133,6 +149,9 @@ public class AdHocService {
         return predicates;
     }
 
+    /**
+     * Cria o filtro (Predicate) para cada tipo de operador e valor.
+     */
     private <T extends Comparable<? super T>> Predicate getPredicateFilter(T value, Operator operator,
             Expression<T> path, CriteriaBuilder cb) {
         return switch (operator) {
@@ -146,6 +165,9 @@ public class AdHocService {
         };
     }
 
+    /**
+     * Obtém o caminho (path) do atributo na entidade, tratando casos de chave composta.
+     */
     private Expression<?> getPath(From<?, ?> from, String attribute) {
         try {
             return from.get(attribute);
@@ -154,6 +176,9 @@ public class AdHocService {
         }
     }
 
+    /**
+     * Prepara a seleção dos campos a serem retornados na consulta.
+     */
     private List<Selection<Object>> prepareSelectStatements(Set<ColumnDTO> columnSet, Map<Table, From<?, ?>> joins,
             CriteriaBuilder cb) {
         if (columnSet.isEmpty()) {
@@ -178,6 +203,9 @@ public class AdHocService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Realiza os joins necessários entre as tabelas, conforme solicitado.
+     */
     private void prepareJoinTables(Table reference, Map<Table, From<?, ?>> joins, Set<JoinDTO> joinDTOSet) {
         if (!joins.containsKey(reference))
             return;
@@ -191,6 +219,9 @@ public class AdHocService {
                 });
     }
 
+    /**
+     * Seleciona o campo padrão da entidade, aplicando alias se necessário.
+     */
     private Selection<Object> selectDefault(From<?, ?> from, Select field, String alias) {
         Path<Object> select = from.get(field.attribute());
         return alias != null ? select.alias(alias) : select;

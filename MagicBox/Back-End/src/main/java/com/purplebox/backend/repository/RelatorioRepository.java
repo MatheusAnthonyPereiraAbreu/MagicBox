@@ -8,11 +8,15 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
+// Repositório responsável por consultas customizadas de relatórios.
 public class RelatorioRepository {
 
     @PersistenceContext
     private EntityManager entityManager;
 
+    /**
+     * Busca as top 5 músicas por país, incluindo informações de artista, tag principal, álbum e posição no ranking.
+     */
     public List<TopMusicaDTO> buscarTopMusicas() {
         String sql = """
             WITH primeira_tag_por_artista AS (

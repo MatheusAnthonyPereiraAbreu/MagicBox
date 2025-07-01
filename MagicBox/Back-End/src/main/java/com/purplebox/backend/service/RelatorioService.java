@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
+// Serviço responsável pela lógica de relatórios relacionados a músicas.
 public class RelatorioService {
 
     private final RelatorioRepository repository;
@@ -15,8 +16,11 @@ public class RelatorioService {
         this.repository = repository;
     }
 
+    /**
+     * Busca o ranking das músicas mais tocadas por país.
+     */
     public List<TopMusicaDTO> buscarTopMusicas() {
-    return repository.buscarTopMusicas();
-}
+        return repository.buscarTopMusicas();
+    }
 
 }
