@@ -4,6 +4,8 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { CarouselModule } from 'primeng/carousel';
 import { LogoComponent } from '../../components/logo/logo.component';
 import { fromEvent, debounceTime, Subject, takeUntil } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { HomeService } from './home.service';
 
 @Component({
     selector: 'app-home',
@@ -111,7 +113,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
     selectedCountry = 'Brasil';
 
-    constructor(private cdr: ChangeDetectorRef) { }
+    constructor(private cdr: ChangeDetectorRef, private http: HttpClient, private homeService: HomeService) { }
 
     ngOnInit() {
         this.updateResponsiveValues();
@@ -128,6 +130,10 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
             .subscribe(() => {
                 this.handleResize();
             });
+
+        this.homeService.getTopMusicas().subscribe((res: any) => {
+            console.log(res);
+        });
     }
 
     ngAfterViewInit() {

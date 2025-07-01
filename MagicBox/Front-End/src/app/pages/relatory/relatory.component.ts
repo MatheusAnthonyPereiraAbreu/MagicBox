@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnChanges } from '@angular/core';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, FormArray, FormControl } from '@angular/forms';
 import { ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RelatoryService, AdHocDTO, Table, Select, ColumnDTO, WhereDTO, GroupByDTO, AggregationDTO, Operator, Aggregation, JoinDTO, JoinType } from './relatory.service';
 
 interface Column {
   table: string;
@@ -28,7 +29,7 @@ interface Group {
   standalone: true,
   imports: [FormsModule, ReactiveFormsModule, CommonModule],
 })
-export class RelatoryComponent {
+export class RelatoryComponent implements OnInit, OnChanges {
   colorScheme = 'cool';
 
   pieData = [
@@ -83,8 +84,8 @@ export class RelatoryComponent {
     'ARTISTA_TAG',
     'SIMILARIDADE_ARTISTA',
     'PAIS',
-    'RANKING_ATUAL_MUSICAS_PAISES',
-    'RANKING_ATUAL_ARTISTAS_PAISES'
+    'RANKING_MUSICAS',
+    'RANKING_ARTISTAS'
   ];
 
   // Colunas por tabela
@@ -96,8 +97,8 @@ export class RelatoryComponent {
     ARTISTA_TAG: ['artista_id', 'tag_id'],
     SIMILARIDADE_ARTISTA: ['artista_base_id', 'artista_similar_id'],
     PAIS: ['id', 'nome', 'codigo'],
-    RANKING_ATUAL_MUSICAS_PAISES: ['musica_id', 'pais_id', 'posicao_ranking', 'data_ultima_atualizacao'],
-    RANKING_ATUAL_ARTISTAS_PAISES: ['artista_id', 'pais_id', 'posicao_ranking', 'data_ultima_atualizacao']
+    RANKING_MUSICAS: ['musica_id', 'pais_id', 'posicao_ranking', 'data_ultima_atualizacao'],
+    RANKING_ARTISTAS: ['artista_id', 'pais_id', 'posicao_ranking', 'data_ultima_atualizacao']
   };
 
   // Tabelas selecionadas
@@ -117,7 +118,14 @@ export class RelatoryComponent {
   formAliases: FormGroup;
   form: FormGroup;
 
-  constructor(private fb: FormBuilder, private cdr: ChangeDetectorRef) {
+  relatoryResult: any = null;
+  paginatedResult: any[] = [];
+  currentPage: number = 1;
+  pageSize: number = 10;
+  totalPages: number = 1;
+  resultKeys: string[] = [];
+
+  constructor(private fb: FormBuilder, private cdr: ChangeDetectorRef, private relatoryService: RelatoryService) {
     this.formTables = this.fb.group({});
     this.formColumns = this.fb.group({});
     this.formAliases = this.fb.group({});
@@ -154,6 +162,14 @@ export class RelatoryComponent {
         });
       this.cdr.detectChanges();
     });
+  }
+
+  ngOnInit() {
+    // ...
+  }
+
+  ngOnChanges() {
+    this.updatePagination();
   }
 
   // Reactive Forms para filtros e agrupamentos
@@ -296,12 +312,76 @@ export class RelatoryComponent {
   }
 
   onSearch() {
-    // Monta a query baseada nas seleções
-    console.log('Tabelas:', this.selectedTables);
-    console.log('Colunas:', this.selectedColumns);
-    console.log('Filtros:', this.filters);
-    console.log('Agrupamentos:', this.groups);
-    // TODO: Implementar chamada ao backend
+    // Monta o DTO AdHocDTO baseado nas seleções
+    const mainTable: Table = (this.selectedTables[0] || '').toUpperCase();
+    let joins: JoinDTO[] = [];
+    if (this.selectedTables.length > 1) {
+      for (let i = 1; i < this.selectedTables.length; i++) {
+        joins.push({
+          from: this.selectedTables[i - 1].toUpperCase(),
+          to: this.selectedTables[i].toUpperCase(),
+          type: JoinType.INNER
+        });
+      }
+    }
+
+    const columns: ColumnDTO[] = this.selectedColumns.map(col => ({
+      table: col.table.toUpperCase(),
+      field: col.name.toUpperCase(),
+      alias: col.alias
+    }));
+
+    const wheres: WhereDTO[] = this.filters.controls
+      .filter((f: any) => f.value.field && f.value.value)
+      .map((f: any) => {
+        const [tableName, fieldName] = f.value.field.split('.');
+        return {
+          table: tableName.toUpperCase(),
+          field: fieldName.toUpperCase(),
+          operator: f.value.operator as Operator,
+          value: f.value.value
+        };
+      });
+
+    let groupBy: GroupByDTO | null = null;
+    if (this.groups.controls[0]?.value.field) {
+      const [tableName, fieldName] = this.groups.controls[0].value.field.split('.');
+      const groupColumn: ColumnDTO = {
+        table: tableName.toUpperCase(),
+        field: fieldName.toUpperCase(),
+        alias: this.groups.controls[0].value.alias
+      };
+
+      // Por padrão, usa COUNT como agregação
+      const aggregation: AggregationDTO = {
+        table: tableName.toUpperCase(),
+        field: fieldName.toUpperCase(),
+        aggregation: Aggregation.COUNT,
+        alias: 'count'
+      };
+
+      groupBy = {
+        columnSet: [groupColumn],
+        aggregation: aggregation
+      };
+    }
+
+    const dto: AdHocDTO = {
+      table: mainTable,
+      join: joins,
+      column: columns,
+      where: wheres,
+      groupBy: groupBy
+    };
+
+    console.log('DTO enviado:', dto);
+
+    this.relatoryService.postAdHoc(dto).subscribe(result => {
+      this.relatoryResult = result;
+      this.currentPage = 1;
+      this.updatePagination();
+      console.log('Resultado do relatório:', result);
+    });
   }
 
   onReset() {
@@ -317,5 +397,31 @@ export class RelatoryComponent {
     this.filters.at(0).reset({ field: '', operator: '=', value: '' });
     while (this.groups.length > 1) this.groups.removeAt(0);
     this.groups.at(0).reset({ field: '', alias: '' });
+  }
+
+  updatePagination() {
+    if (!this.relatoryResult || !Array.isArray(this.relatoryResult)) {
+      this.paginatedResult = [];
+      this.totalPages = 1;
+      this.resultKeys = [];
+      return;
+    }
+    this.totalPages = Math.ceil(this.relatoryResult.length / this.pageSize);
+    const start = (this.currentPage - 1) * this.pageSize;
+    const end = start + this.pageSize;
+    this.paginatedResult = this.relatoryResult.slice(start, end);
+    this.resultKeys = this.paginatedResult.length > 0 ? Object.keys(this.paginatedResult[0]) : [];
+  }
+
+  goToPage(page: number) {
+    if (page < 1 || page > this.totalPages) return;
+    this.currentPage = page;
+    this.updatePagination();
+  }
+
+  set pageSizeSetter(val: number) {
+    this.pageSize = val;
+    this.currentPage = 1;
+    this.updatePagination();
   }
 }
