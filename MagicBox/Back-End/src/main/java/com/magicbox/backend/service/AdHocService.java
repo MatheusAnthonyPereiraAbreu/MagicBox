@@ -51,7 +51,16 @@ public class AdHocService {
         new JoinEdge(Table.RANKING_ARTISTAS, Table.PAIS, JoinType.INNER, "pais", "id"),
         new JoinEdge(Table.ARTISTA_TAG, Table.ARTISTA, JoinType.INNER, "artista", "id"),
         new JoinEdge(Table.ARTISTA_TAG, Table.TAG, JoinType.INNER, "tag", "id"),
-        new JoinEdge(Table.SIMILARIDADE_ARTISTA, Table.ARTISTA, JoinType.INNER, "artista", "id")
+        new JoinEdge(Table.SIMILARIDADE_ARTISTA, Table.ARTISTA, JoinType.INNER, "artistaBase", "id"),
+        new JoinEdge(Table.SIMILARIDADE_ARTISTA, Table.ARTISTA, JoinType.INNER, "artistaSimilar", "id"),
+        // Adicionando joins faltantes para melhor conectividade
+        new JoinEdge(Table.ARTISTA, Table.ARTISTA_TAG, JoinType.LEFT, "artistaTags", "artista"),
+        new JoinEdge(Table.ARTISTA, Table.RANKING_ARTISTAS, JoinType.LEFT, "rankingsArtistas", "artista"),
+        new JoinEdge(Table.MUSICA, Table.RANKING_MUSICAS, JoinType.LEFT, "rankingsMusicas", "musica"),
+        // NOVO: Joins para conectar via RANKING_ARTISTAS e RANKING_MUSICAS
+        new JoinEdge(Table.RANKING_ARTISTAS, Table.ARTISTA, JoinType.LEFT, "artista", "id"),
+        new JoinEdge(Table.RANKING_MUSICAS, Table.MUSICA, JoinType.LEFT, "musica", "id"),
+        new JoinEdge(Table.RANKING_MUSICAS, Table.ARTISTA, JoinType.LEFT, "artista", "id")
     );
 
     // Busca o menor caminho de joins entre todas as tabelas selecionadas
@@ -62,6 +71,112 @@ public class AdHocService {
             return Set.of();
         }
         
+        // SOLUÇÃO RÁPIDA: Usa ARTISTA como hub central sempre que possível
+        Set<JoinDTO> joins = new HashSet<>();
+        
+        // Se ARTISTA está nas tabelas selecionadas, usa como hub
+        if (tables.contains(Table.ARTISTA)) {
+            System.out.println("Usando ARTISTA como hub central");
+            joins.addAll(createJoinsFromArtista(tables));
+        } else {
+            // NOVO: Verifica se ARTISTA é necessária para conectar as tabelas
+            if (isArtistaNeededForConnection(tables)) {
+                System.out.println("ARTISTA é necessária para conectar as tabelas, adicionando como hub");
+                Set<Table> tablesWithArtista = new HashSet<>(tables);
+                tablesWithArtista.add(Table.ARTISTA);
+                joins.addAll(createJoinsFromArtista(tablesWithArtista));
+            } else {
+                // Se ARTISTA não está, usa o algoritmo BFS original
+                System.out.println("ARTISTA não está nas tabelas, usando algoritmo BFS");
+                joins.addAll(findJoinPathBFS(tables));
+            }
+        }
+        
+        System.out.println("Joins finais: " + joins);
+        return joins;
+    }
+
+    // NOVO: Verifica se ARTISTA é necessária para conectar as tabelas
+    private boolean isArtistaNeededForConnection(Set<Table> tables) {
+        // Tabelas que precisam de ARTISTA para serem conectadas
+        Set<Table> tablesNeedingArtista = Set.of(
+            Table.ARTISTA_TAG, 
+            Table.SIMILARIDADE_ARTISTA, 
+            Table.RANKING_ARTISTAS
+        );
+        
+        // Se alguma dessas tabelas está presente, ARTISTA é necessária
+        boolean needsArtista = tables.stream().anyMatch(tablesNeedingArtista::contains);
+        
+        System.out.println("Verificando se ARTISTA é necessária: " + needsArtista);
+        System.out.println("Tabelas que precisam de ARTISTA: " + tablesNeedingArtista);
+        System.out.println("Tabelas selecionadas: " + tables);
+        
+        return needsArtista;
+    }
+
+    // NOVO: Cria joins rapidamente usando ARTISTA como hub central
+    private Set<JoinDTO> createJoinsFromArtista(Set<Table> tables) {
+        Set<JoinDTO> joins = new HashSet<>();
+        
+        // Mapeia tabelas que podem ser conectadas diretamente ao ARTISTA
+        Map<Table, JoinType> directConnections = Map.of(
+            Table.ARTISTA_TAG, JoinType.LEFT,
+            Table.RANKING_ARTISTAS, JoinType.LEFT
+        );
+        
+        // Adiciona joins diretos para ARTISTA
+        for (Table table : tables) {
+            if (table != Table.ARTISTA && directConnections.containsKey(table)) {
+                joins.add(new JoinDTO(Table.ARTISTA, table, directConnections.get(table)));
+                System.out.println("Adicionando join direto: ARTISTA -> " + table);
+            }
+        }
+        
+        // Adiciona joins para tabelas que precisam de caminho indireto
+        if (tables.contains(Table.SIMILARIDADE_ARTISTA)) {
+            // SIMILARIDADE_ARTISTA se conecta via artistaBase
+            // Não adicionamos join aqui, pois SIMILARIDADE_ARTISTA já tem join com ARTISTA no grafo
+            System.out.println("SIMILARIDADE_ARTISTA será conectada via join existente no grafo");
+        }
+        
+        if (tables.contains(Table.RANKING_MUSICAS)) {
+            // RANKING_MUSICAS precisa de MUSICA -> ARTISTA
+            joins.add(new JoinDTO(Table.ARTISTA, Table.MUSICA, JoinType.LEFT));
+            joins.add(new JoinDTO(Table.MUSICA, Table.RANKING_MUSICAS, JoinType.LEFT));
+            System.out.println("Adicionando caminho: ARTISTA -> MUSICA -> RANKING_MUSICAS");
+        }
+        
+        if (tables.contains(Table.ALBUM)) {
+            joins.add(new JoinDTO(Table.ARTISTA, Table.ALBUM, JoinType.LEFT));
+            System.out.println("Adicionando join: ARTISTA -> ALBUM");
+        }
+        
+        if (tables.contains(Table.TAG)) {
+            // TAG precisa de ARTISTA_TAG
+            if (!joins.stream().anyMatch(j -> j.to() == Table.ARTISTA_TAG)) {
+                joins.add(new JoinDTO(Table.ARTISTA, Table.ARTISTA_TAG, JoinType.LEFT));
+            }
+            joins.add(new JoinDTO(Table.ARTISTA_TAG, Table.TAG, JoinType.LEFT));
+            System.out.println("Adicionando caminho: ARTISTA -> ARTISTA_TAG -> TAG");
+        }
+        
+        if (tables.contains(Table.PAIS)) {
+            // PAIS pode ser acessado via RANKING_ARTISTAS ou RANKING_MUSICAS
+            if (tables.contains(Table.RANKING_ARTISTAS)) {
+                joins.add(new JoinDTO(Table.RANKING_ARTISTAS, Table.PAIS, JoinType.LEFT));
+                System.out.println("Adicionando join: RANKING_ARTISTAS -> PAIS");
+            } else if (tables.contains(Table.RANKING_MUSICAS)) {
+                joins.add(new JoinDTO(Table.RANKING_MUSICAS, Table.PAIS, JoinType.LEFT));
+                System.out.println("Adicionando join: RANKING_MUSICAS -> PAIS");
+            }
+        }
+        
+        return joins;
+    }
+
+    // Método BFS original (renomeado)
+    private Set<JoinDTO> findJoinPathBFS(Set<Table> tables) {
         // Algoritmo BFS para encontrar árvore de conexões
         Map<Table, List<JoinEdge>> graph = new HashMap<>();
         for (JoinEdge edge : RELATIONSHIP_GRAPH) {
@@ -74,8 +189,8 @@ public class AdHocService {
         
         System.out.println("Grafo construído: " + graph.keySet());
         
-        List<Table> tableList = new ArrayList<>(tables);
-        Table root = tableList.get(0);
+        // Escolhe a melhor tabela raiz baseada na conectividade
+        Table root = selectBestRootTable(tables, graph);
         System.out.println("Tabela raiz escolhida: " + root);
         
         Set<Table> visited = new HashSet<>();
@@ -119,8 +234,35 @@ public class AdHocService {
             }
         }
         
-        System.out.println("Joins finais: " + joins);
         return joins;
+    }
+
+    // NOVO: Seleciona a melhor tabela raiz baseada na conectividade
+    private Table selectBestRootTable(Set<Table> tables, Map<Table, List<JoinEdge>> graph) {
+        Table bestRoot = null;
+        int maxConnections = -1;
+        
+        for (Table table : tables) {
+            List<JoinEdge> connections = graph.getOrDefault(table, List.of());
+            int validConnections = (int) connections.stream()
+                    .filter(edge -> tables.contains(edge.to))
+                    .count();
+            
+            System.out.println("Tabela " + table + " tem " + validConnections + " conexões válidas");
+            
+            if (validConnections > maxConnections) {
+                maxConnections = validConnections;
+                bestRoot = table;
+            }
+        }
+        
+        if (bestRoot == null) {
+            // Fallback: escolhe a primeira tabela
+            bestRoot = tables.iterator().next();
+        }
+        
+        System.out.println("Melhor tabela raiz: " + bestRoot + " com " + maxConnections + " conexões");
+        return bestRoot;
     }
 
     // NOVO: Encontra o caminho de joins entre duas tabelas específicas
@@ -410,32 +552,45 @@ public class AdHocService {
         System.out.println("=== DEBUG: Preparando seleção de campos ===");
         System.out.println("Colunas específicas: " + columnSet);
         System.out.println("Tabelas disponíveis para seleção: " + joins.keySet());
+        System.out.println("Número de tabelas disponíveis: " + joins.size());
         
         if (columnSet.isEmpty()) {
             System.out.println("Nenhuma coluna específica - selecionando todos os campos de todas as tabelas");
             System.out.println("Tabelas disponíveis para seleção: " + joins.keySet());
-            return joins.keySet().stream()
-                    .flatMap(table -> {
+            
+            List<Selection<Object>> allSelections = new ArrayList<>();
+            
+            for (Table table : joins.keySet()) {
+                System.out.println("=== Processando tabela: " + table + " ===");
+                try {
+                    List<Select> fields = Select.getFromTable(table);
+                    System.out.println("Campos disponíveis para " + table + ": " + fields.stream().map(Select::attribute).collect(Collectors.toList()));
+                    
+                    for (Select field : fields) {
                         try {
-                            System.out.println("Processando tabela: " + table);
-                            return Select.getFromTable(table).stream()
-                                    .map(field -> {
-                                        try {
-                                            String alias = table.attribute() + "_" + field.attribute();
-                                            System.out.println("Selecionando campo: " + table + "." + field.attribute() + " -> " + alias);
-                                            return selectDefault(joins.get(table), field, alias);
-                                        } catch (Exception e) {
-                                            System.err.println("Aviso: Ignorando campo " + table + "." + field.attribute() + " - " + e.getMessage());
-                                            return null;
-                                        }
-                                    })
-                                    .filter(Objects::nonNull); // Remove campos que falharam
+                            String alias = table.attribute() + "_" + field.attribute();
+                            System.out.println("Tentando selecionar campo: " + table + "." + field.attribute() + " -> " + alias);
+                            
+                            From<?, ?> from = joins.get(table);
+                            if (from == null) {
+                                System.err.println("ERRO: From é null para tabela " + table);
+                                continue;
+                            }
+                            
+                            Selection<Object> selection = selectDefault(from, field, alias);
+                            allSelections.add(selection);
+                            System.out.println("✓ Campo selecionado com sucesso: " + table + "." + field.attribute());
                         } catch (Exception e) {
-                            System.err.println("Aviso: Erro ao processar tabela " + table + " - " + e.getMessage());
-                            return java.util.stream.Stream.<Selection<Object>>empty();
+                            System.err.println("✗ Erro ao selecionar campo " + table + "." + field.attribute() + ": " + e.getMessage());
                         }
-                    })
-                    .collect(Collectors.toList());
+                    }
+                } catch (Exception e) {
+                    System.err.println("✗ Erro ao processar tabela " + table + ": " + e.getMessage());
+                }
+            }
+            
+            System.out.println("Total de campos selecionados: " + allSelections.size());
+            return allSelections;
         }
 
         System.out.println("Processando colunas específicas");
@@ -515,15 +670,15 @@ public class AdHocService {
     // NOVO: Mapeia o nome correto do atributo para joins
     private String getJoinAttribute(Table table) {
         String attribute = switch (table) {
-            case ARTISTA -> "artista"; // Para joins que vêm de ARTISTA_TAG para ARTISTA
+            case ARTISTA -> "artista"; // Para joins que vêm de outras tabelas para ARTISTA
             case ALBUM -> "album";
             case MUSICA -> "musica";
             case PAIS -> "pais";
             case TAG -> "tag";
-            case ARTISTA_TAG -> "artistaTags"; // Corrigido para o nome do atributo na entidade Artista
-            case SIMILARIDADE_ARTISTA -> "similaridade_artista"; // Não deve ser usado para joins
-            case RANKING_ARTISTAS -> "rankingsArtistas"; // Relacionamento adicionado em Artista
-            case RANKING_MUSICAS -> "rankingsMusicas"; // Relacionamento que será adicionado em Musica
+            case ARTISTA_TAG -> "artistaTags"; // Relacionamento na entidade Artista
+            case SIMILARIDADE_ARTISTA -> "artista"; // Para joins que vêm de SIMILARIDADE_ARTISTA para ARTISTA
+            case RANKING_ARTISTAS -> "rankingsArtistas"; // Relacionamento na entidade Artista
+            case RANKING_MUSICAS -> "rankingsMusicas"; // Relacionamento na entidade Musica
             case USUARIO -> "usuario";
         };
         System.out.println("DEBUG: Mapeando tabela " + table + " para atributo " + attribute);
@@ -536,13 +691,16 @@ public class AdHocService {
         System.out.println("Tabela raiz: " + rootTable);
         System.out.println("Todas as tabelas necessárias: " + allTables);
         System.out.println("Joins do DTO: " + joinDTOSet);
+        System.out.println("Joins iniciais: " + joins.keySet());
         
         // Primeiro, cria os joins diretos do DTO
         prepareJoinTables(rootTable, joins, joinDTOSet);
         System.out.println("Joins criados após DTO: " + joins.keySet());
+        System.out.println("Número de joins após DTO: " + joins.size());
         
         // Depois, para cada tabela que precisa ser acessada, garante que o caminho completo existe
         for (Table targetTable : allTables) {
+            System.out.println("=== Verificando tabela: " + targetTable + " ===");
             if (!joins.containsKey(targetTable) && !targetTable.equals(rootTable)) {
                 System.out.println("Tentando conectar " + rootTable + " -> " + targetTable);
                 try {
@@ -551,6 +709,7 @@ public class AdHocService {
                     
                     // Cria cada join do caminho se ainda não existir
                     for (JoinEdge edge : path) {
+                        System.out.println("Processando edge: " + edge.from + " -> " + edge.to);
                         if (!joins.containsKey(edge.to)) {
                             From<?, ?> from = joins.get(edge.from);
                             if (from == null) {
@@ -559,7 +718,12 @@ public class AdHocService {
                             }
                             String joinAttribute = getJoinAttribute(edge.to);
                             System.out.println("Criando join: " + edge.from + " -> " + edge.to + " via " + joinAttribute);
-                            joins.put(edge.to, from.join(joinAttribute, edge.type));
+                            try {
+                                joins.put(edge.to, from.join(joinAttribute, edge.type));
+                                System.out.println("✓ Join criado com sucesso: " + edge.from + " -> " + edge.to);
+                            } catch (Exception e) {
+                                System.err.println("✗ Erro ao criar join " + edge.from + " -> " + edge.to + ": " + e.getMessage());
+                            }
                         } else {
                             System.out.println("Join já existe: " + edge.from + " -> " + edge.to);
                         }
@@ -575,6 +739,7 @@ public class AdHocService {
         
         System.out.println("=== DEBUG: Joins finais criados: " + joins.keySet() + " ===");
         System.out.println("=== DEBUG: Tabelas que deveriam estar disponíveis: " + allTables + " ===");
+        System.out.println("Número final de joins: " + joins.size());
         
         // Verifica se todas as tabelas necessárias estão disponíveis
         Set<Table> missingTables = allTables.stream()
@@ -583,6 +748,8 @@ public class AdHocService {
         
         if (!missingTables.isEmpty()) {
             System.err.println("ERRO: Tabelas não encontradas no mapa de joins: " + missingTables);
+        } else {
+            System.out.println("✓ Todas as tabelas necessárias estão disponíveis!");
         }
     }
 }
