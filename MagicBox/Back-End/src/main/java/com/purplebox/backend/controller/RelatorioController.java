@@ -1,7 +1,11 @@
 package com.purplebox.backend.controller;
 
+import com.purplebox.backend.model.dto.AdHocDTO;
 import com.purplebox.backend.model.dto.TopMusicaDTO;
 import com.purplebox.backend.service.RelatorioService;
+import com.purplebox.backend.service.AdHocService;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,14 +14,23 @@ import java.util.List;
 @RequestMapping("/api/relatorios")
 public class RelatorioController {
 
-    private final RelatorioService service;
+    private final RelatorioService relatorioService;
+    private final AdHocService adHocService;
 
-    public RelatorioController(RelatorioService service) {
-        this.service = service;
+    public RelatorioController(RelatorioService relatorioService, AdHocService adHocService) {
+        this.relatorioService = relatorioService;
+        this.adHocService = adHocService;
     }
 
     @GetMapping("/top-musicas")
     public List<TopMusicaDTO> getTopMusicasPorPais() {
-        return service.buscarTopMusicas();
+        return relatorioService.buscarTopMusicas();
+    }
+
+    @PostMapping("/ad-hoc")
+    @ResponseBody
+    @ResponseStatus(HttpStatus.OK)
+    public Object gerarRelatorio(@RequestBody AdHocDTO request) {
+        return adHocService.gerarRelatorio(request);
     }
 }

@@ -9,6 +9,8 @@ import lombok.Builder;
 
 import java.time.LocalDateTime;
 
+import com.purplebox.backend.model.dto.Selectable;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -16,7 +18,7 @@ import java.time.LocalDateTime;
 @Builder
 @Entity
 @Table(name = "ranking_atual_musicas_paises")
-public class RankingAtualMusicasPaises {
+public class RankingAtualMusicasPaises implements Selectable {
 
     @EmbeddedId
     private RankingAtualMusicasPaisesId id;

@@ -1,5 +1,7 @@
 package com.purplebox.backend.model.entity;
 
+import com.purplebox.backend.model.dto.Selectable;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,7 +16,7 @@ import lombok.Builder;
 @Builder
 @Entity
 @Table(name = "pais")
-public class Pais {
+public class Pais implements Selectable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

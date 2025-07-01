@@ -13,6 +13,7 @@ import lombok.Builder;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+public
 class RankingAtualMusicasPaisesId implements java.io.Serializable {
     private Integer musicaId;
     private Integer paisId;

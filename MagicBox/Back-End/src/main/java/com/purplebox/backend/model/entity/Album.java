@@ -9,6 +9,8 @@ import lombok.Builder;
 
 import java.util.List;
 
+import com.purplebox.backend.model.dto.Selectable;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -16,7 +18,7 @@ import java.util.List;
 @Builder
 @Entity
 @Table(name = "album")
-public class Album {
+public class Album implements Selectable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

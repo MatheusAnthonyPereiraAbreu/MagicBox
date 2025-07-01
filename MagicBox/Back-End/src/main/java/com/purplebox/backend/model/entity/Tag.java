@@ -10,6 +10,8 @@ import lombok.Builder;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.purplebox.backend.model.dto.Selectable;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -17,7 +19,7 @@ import java.util.Set;
 @Builder
 @Entity
 @Table(name = "tag")
-public class Tag {
+public class Tag implements Selectable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
