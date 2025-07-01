@@ -28,5 +28,5 @@ public class Tag implements Selectable {
     private String nome;
 
     @ManyToMany(mappedBy = "tags")
-    private Set<Artista> artistas = new HashSet<>();
+    private Set<Artista> artista = new HashSet<>();
 }

@@ -34,6 +34,6 @@ public class Album implements Selectable {
     private Artista artista;
 
     @OneToMany(mappedBy = "album", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Musica> musicas;
+    private List<Musica> musica;
 }
 

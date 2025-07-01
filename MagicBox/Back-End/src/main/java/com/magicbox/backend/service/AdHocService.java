@@ -169,12 +169,14 @@ public class AdHocService {
      * Obtém o caminho (path) do atributo na entidade, tratando casos de chave composta.
      */
     private Expression<?> getPath(From<?, ?> from, String attribute) {
-        try {
-            return from.get(attribute);
-        } catch (IllegalArgumentException e) {
-            return from.get("id").get(attribute);
+        String[] parts = attribute.split("\\.");
+        Path<?> path = from;
+        for (String part : parts) {
+            path = path.get(part);
         }
+        return path;
     }
+
 
     /**
      * Prepara a seleção dos campos a serem retornados na consulta.
@@ -223,7 +225,7 @@ public class AdHocService {
      * Seleciona o campo padrão da entidade, aplicando alias se necessário.
      */
     private Selection<Object> selectDefault(From<?, ?> from, Select field, String alias) {
-        Path<Object> select = from.get(field.attribute());
-        return alias != null ? select.alias(alias) : select;
-    }
+    Path<Object> select = (Path<Object>) getPath(from, field.attribute()); 
+    return alias != null ? select.alias(alias) : select;
+}
 }

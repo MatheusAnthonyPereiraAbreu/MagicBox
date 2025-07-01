@@ -33,10 +33,10 @@ public class Artista implements Selectable {
     private Long playcountGlobais;
 
     @OneToMany(mappedBy = "artista", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Album> albuns;
+    private List<Album> album;
 
     @OneToMany(mappedBy = "artista", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Musica> musicas;
+    private List<Musica> musica;
 
     @ManyToMany
     @JoinTable(
@@ -52,6 +52,6 @@ public class Artista implements Selectable {
             joinColumns = @JoinColumn(name = "artista_base_id"),
             inverseJoinColumns = @JoinColumn(name = "artista_similar_id")
     )
-    private Set<Artista> artistasSimilares = new HashSet<>();
+    private Set<Artista> similaridade_artista = new HashSet<>();
 }
 

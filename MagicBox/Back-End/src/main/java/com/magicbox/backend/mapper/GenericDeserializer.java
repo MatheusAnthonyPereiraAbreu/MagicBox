@@ -36,6 +36,8 @@ public abstract class GenericDeserializer<T> extends StdDeserializer<T> {
             case PAIS -> PaisSelect.valueOf(fieldStr);
             case TAG -> TagSelect.valueOf(fieldStr);
             case USUARIO -> UsuarioSelect.valueOf(fieldStr);
+            case ARTISTA_TAG -> ArtistaTagSelect.valueOf(fieldStr);
+            case SIMILARIDADE_ARTISTA -> SimilaridadeArtistaSelect.valueOf(fieldStr);
             case RANKING_ARTISTAS -> RankingAtualArtistasPaisesSelect.valueOf(fieldStr);
             case RANKING_MUSICAS -> RankingAtualMusicasPaisesSelect.valueOf(fieldStr);
         };
