@@ -37,7 +37,18 @@ public class RelatorioController {
      */
     @PostMapping(value = "/ad-hoc", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public Object gerarRelatorio(@RequestBody AdHocDTO request) {
-        return adHocService.gerarRelatorio(request);
+    public Object gerarRelatorio(@RequestBody AdHocDTO request,
+                                 @RequestParam(defaultValue = "0") int page,
+                                 @RequestParam(defaultValue = "50") int size) {
+        Object result = adHocService.gerarRelatorio(request, page, size);
+        // Se o resultado já for um Map com 'data' e 'total', apenas retorne
+        if (result instanceof java.util.Map map && map.containsKey("data") && map.containsKey("total")) {
+            return result;
+        }
+        // Caso contrário, retorne no formato esperado
+        java.util.Map<String, Object> response = new java.util.HashMap<>();
+        response.put("data", result);
+        response.put("total", (result instanceof java.util.Collection) ? ((java.util.Collection<?>) result).size() : 0);
+        return response;
     }
 }

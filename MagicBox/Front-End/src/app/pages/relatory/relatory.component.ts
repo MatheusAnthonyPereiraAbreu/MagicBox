@@ -93,8 +93,8 @@ export class RelatoryComponent implements OnInit, OnChanges {
     ARTISTA: ['id', 'nome', 'ouvintes_globais', 'playcount_globais'],
     ALBUM: ['id', 'nome', 'playcount_globais', 'artista_id'],
     MUSICA: ['id', 'nome', 'duracao_faixa', 'artista_id', 'album_id'],
-    TAG: ['id', 'name'],
     ARTISTA_TAG: ['artista_id', 'tag_id'],
+    TAG: ['id', 'nome'],
     SIMILARIDADE_ARTISTA: ['artista_base_id', 'artista_similar_id'],
     PAIS: ['id', 'nome', 'codigo'],
     RANKING_MUSICAS: ['musica_id', 'pais_id', 'posicao_ranking', 'data_ultima_atualizacao'],
@@ -124,6 +124,22 @@ export class RelatoryComponent implements OnInit, OnChanges {
   pageSize: number = 10;
   totalPages: number = 1;
   resultKeys: string[] = [];
+  totalItems: number = 0;
+  isLoading: boolean = false;
+
+  // Mapa de joins válidos conforme o modelo do banco
+  validJoins: { from: string, to: string }[] = [
+    { from: 'ALBUM', to: 'ARTISTA' },
+    { from: 'MUSICA', to: 'ALBUM' },
+    { from: 'MUSICA', to: 'ARTISTA' },
+    { from: 'RANKING_ATUAL_MUSICAS_PAISES', to: 'MUSICA' },
+    { from: 'RANKING_ATUAL_MUSICAS_PAISES', to: 'PAIS' },
+    { from: 'RANKING_ATUAL_ARTISTAS_PAISES', to: 'ARTISTA' },
+    { from: 'RANKING_ATUAL_ARTISTAS_PAISES', to: 'PAIS' },
+    { from: 'ARTISTA_TAG', to: 'ARTISTA' },
+    { from: 'ARTISTA_TAG', to: 'TAG' },
+    { from: 'SIMILARIDADE_ARTISTA', to: 'ARTISTA' }
+  ];
 
   constructor(private fb: FormBuilder, private cdr: ChangeDetectorRef, private relatoryService: RelatoryService) {
     this.formTables = this.fb.group({});
@@ -311,19 +327,95 @@ export class RelatoryComponent implements OnInit, OnChanges {
     this.selectedColumns = this.selectedColumns.filter(c => !(c.table === table && c.name === name));
   }
 
-  onSearch() {
-    // Monta o DTO AdHocDTO baseado nas seleções
-    const mainTable: Table = (this.selectedTables[0] || '').toUpperCase();
-    let joins: JoinDTO[] = [];
-    if (this.selectedTables.length > 1) {
-      for (let i = 1; i < this.selectedTables.length; i++) {
-        joins.push({
-          from: this.selectedTables[i - 1].toUpperCase(),
-          to: this.selectedTables[i].toUpperCase(),
-          type: JoinType.INNER
-        });
+  // Função para escolher a tabela principal baseada nas tabelas selecionadas
+  selectMainTable(): Table {
+    if (this.selectedTables.length === 0) {
+      return 'ARTISTA_TAG'; // Tabela padrão
+    }
+
+    if (this.selectedTables.length === 1) {
+      return this.selectedTables[0].toUpperCase() as Table;
+    }
+
+    // Prioriza tabelas principais (que têm mais relacionamentos)
+    const tablePriorities = [
+      'ARTISTA',    // Tabela central com mais relacionamentos
+      'MUSICA',     // Tabela importante
+      'ALBUM',      // Tabela importante
+      'PAIS',       // Tabela de referência
+      'TAG',        // Tabela de referência
+      'ARTISTA_TAG', // Tabela de junção
+      'RANKING_ATUAL_MUSICAS_PAISES', // Tabela de ranking
+      'RANKING_ATUAL_ARTISTAS_PAISES', // Tabela de ranking
+      'SIMILARIDADE_ARTISTA' // Tabela de similaridade
+    ];
+
+    // Encontra a primeira tabela da lista de prioridades que está selecionada
+    for (const priorityTable of tablePriorities) {
+      if (this.selectedTables.includes(priorityTable)) {
+        return priorityTable as Table;
       }
     }
+
+    // Se não encontrar nenhuma tabela prioritária, retorna a primeira selecionada
+    return this.selectedTables[0].toUpperCase() as Table;
+  }
+
+  // Função para encontrar o menor caminho de joins válidos conectando todas as tabelas selecionadas
+  findJoinPath(): JoinDTO[] {
+    if (this.selectedTables.length <= 1) return [];
+    // Monta o grafo dos relacionamentos válidos
+    const graph: { [key: string]: string[] } = {};
+    this.validJoins.forEach(j => {
+      if (!graph[j.from]) graph[j.from] = [];
+      if (!graph[j.to]) graph[j.to] = [];
+      graph[j.from].push(j.to);
+      graph[j.to].push(j.from);
+    });
+    // Algoritmo de busca em largura para encontrar a árvore de conexões
+    const tables = this.selectedTables.map(t => t.toUpperCase());
+    const visited = new Set<string>();
+    const parent: { [key: string]: string | null } = {};
+    const queue: string[] = [tables[0]];
+    parent[tables[0]] = null;
+    while (queue.length > 0) {
+      const current = queue.shift()!;
+      visited.add(current);
+      (graph[current] || []).forEach(neigh => {
+        if (!visited.has(neigh) && tables.includes(neigh)) {
+          if (!(neigh in parent)) {
+            parent[neigh] = current;
+            queue.push(neigh);
+          }
+        }
+      });
+    }
+    // Se nem todas as tabelas foram visitadas, não há caminho
+    if (!tables.every(t => visited.has(t))) return [];
+    // Monta os joins a partir dos pais
+    const joins: JoinDTO[] = [];
+    for (const t of tables) {
+      const p = parent[t];
+      if (p) {
+        // Descobre a direção correta do join
+        const join = this.validJoins.find(j => (j.from === p && j.to === t) || (j.from === t && j.to === p));
+        if (join) {
+          joins.push({
+            from: join.from,
+            to: join.to,
+            type: JoinType.INNER
+          });
+        }
+      }
+    }
+    return joins;
+  }
+
+  onSearch() {
+    // Monta o DTO AdHocDTO baseado nas seleções
+    // Escolhe a tabela principal baseada nas tabelas selecionadas
+    const mainTable: Table = this.selectMainTable();
+    const joins: JoinDTO[] = this.findJoinPath();
 
     const columns: ColumnDTO[] = this.selectedColumns.map(col => ({
       table: col.table.toUpperCase(),
@@ -376,11 +468,19 @@ export class RelatoryComponent implements OnInit, OnChanges {
 
     console.log('DTO enviado:', dto);
 
-    this.relatoryService.postAdHoc(dto).subscribe(result => {
-      this.relatoryResult = result;
-      this.currentPage = 1;
-      this.updatePagination();
-      console.log('Resultado do relatório:', result);
+    this.isLoading = true;
+    this.relatoryService.postAdHoc(dto, this.currentPage - 1, this.pageSize).subscribe({
+      next: (result) => {
+        this.relatoryResult = result && Array.isArray(result.data) ? result.data : [];
+        this.totalItems = result && typeof result.total === 'number' ? result.total : 0;
+        this.updatePagination();
+        this.isLoading = false;
+        console.log('Resultado do relatório:', result);
+      },
+      error: (err) => {
+        this.isLoading = false;
+        // Trate o erro se quiser
+      }
     });
   }
 
@@ -406,22 +506,31 @@ export class RelatoryComponent implements OnInit, OnChanges {
       this.resultKeys = [];
       return;
     }
-    this.totalPages = Math.ceil(this.relatoryResult.length / this.pageSize);
-    const start = (this.currentPage - 1) * this.pageSize;
-    const end = start + this.pageSize;
-    this.paginatedResult = this.relatoryResult.slice(start, end);
+    this.totalPages = Math.ceil(this.totalItems / this.pageSize) || 1;
+    this.paginatedResult = this.relatoryResult;
     this.resultKeys = this.paginatedResult.length > 0 ? Object.keys(this.paginatedResult[0]) : [];
   }
 
   goToPage(page: number) {
     if (page < 1 || page > this.totalPages) return;
     this.currentPage = page;
-    this.updatePagination();
+    this.onSearch();
   }
 
   set pageSizeSetter(val: number) {
     this.pageSize = val;
     this.currentPage = 1;
     this.updatePagination();
+  }
+
+  downloadJson() {
+    if (!this.relatoryResult) return;
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(this.relatoryResult, null, 2));
+    const downloadAnchorNode = document.createElement('a');
+    downloadAnchorNode.setAttribute("href", dataStr);
+    downloadAnchorNode.setAttribute("download", "relatorio.json");
+    document.body.appendChild(downloadAnchorNode);
+    downloadAnchorNode.click();
+    downloadAnchorNode.remove();
   }
 }

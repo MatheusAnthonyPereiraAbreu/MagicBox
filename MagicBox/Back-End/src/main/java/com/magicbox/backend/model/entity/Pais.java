@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.Builder;
+import java.util.Set;
+import java.util.HashSet;
 
 @Getter
 @Setter
@@ -26,4 +28,11 @@ public class Pais implements Selectable {
 
     @Column(length = 3, unique = true)
     private String codigo;
+
+    // Relacionamentos reversos para rankings
+    @OneToMany(mappedBy = "pais", fetch = FetchType.LAZY)
+    private Set<RankingAtualArtistasPaises> rankingsArtistas = new HashSet<>();
+
+    @OneToMany(mappedBy = "pais", fetch = FetchType.LAZY)
+    private Set<RankingAtualMusicasPaises> rankingsMusicas = new HashSet<>();
 }

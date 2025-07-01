@@ -129,7 +129,7 @@
   </div>
 
   <!-- Botões de ação -->
-  <div class="flex gap-4 mt-6">
+  <div class="flex gap-4 mt-6 flex-wrap">
     <button
       class="px-6 py-3 text-white rounded-lg font-bold flex items-center gap-3 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 bg-primary hover:bg-primary-dark"
       (click)="onSearch()"
@@ -144,10 +144,21 @@
       <span class="ph ph-arrow-counter-clockwise text-lg"></span>
       Limpar
     </button>
+    <button
+      class="px-6 py-3 text-white rounded-lg font-bold flex items-center gap-3 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 bg-emerald-600 hover:bg-emerald-700"
+      (click)="downloadJson()"
+      [disabled]="!relatoryResult || relatoryResult.length === 0"
+    >
+      <span class="ph ph-download-simple text-lg"></span>
+      Baixar JSON
+    </button>
   </div>
 
   <!-- Tabela de Resultados Dinâmica -->
-  <div class="mt-8 rounded-xl shadow-lg overflow-hidden card-indigo" *ngIf="paginatedResult.length > 0">
+  <div class="mt-8 rounded-xl shadow-lg overflow-hidden card-indigo relative" *ngIf="paginatedResult.length > 0 || isLoading">
+    <div *ngIf="isLoading" class="absolute inset-0 z-10 flex items-center justify-center bg-black/60">
+      <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-primary"></div>
+    </div>
     <div class="p-6 border-b" style="border-color: rgba(var(--color-primary-rgb), 0.3);">
       <h2 class="text-lg font-bold flex items-center gap-2 card-indigo-text">
         <span class="ph ph-table"></span>

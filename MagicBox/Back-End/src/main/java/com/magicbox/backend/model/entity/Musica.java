@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.Builder;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -33,4 +35,8 @@ public class Musica implements Selectable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "album_id")
     private Album album;
+
+    // Relacionamento reverso para rankings de músicas
+    @OneToMany(mappedBy = "musica", fetch = FetchType.LAZY)
+    private Set<RankingAtualMusicasPaises> rankingsMusicas = new HashSet<>();
 }

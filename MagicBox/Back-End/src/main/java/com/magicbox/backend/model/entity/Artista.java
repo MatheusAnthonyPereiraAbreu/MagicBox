@@ -53,5 +53,13 @@ public class Artista implements Selectable {
             inverseJoinColumns = @JoinColumn(name = "artista_similar_id")
     )
     private Set<Artista> similaridade_artista = new HashSet<>();
+
+    // Relacionamentos reversos para rankings
+    @OneToMany(mappedBy = "artista", fetch = FetchType.LAZY)
+    private Set<RankingAtualArtistasPaises> rankingsArtistas = new HashSet<>();
+
+    // Relacionamento reverso para ArtistaTag
+    @OneToMany(mappedBy = "artista", fetch = FetchType.LAZY)
+    private Set<ArtistaTag> artistaTags = new HashSet<>();
 }
 

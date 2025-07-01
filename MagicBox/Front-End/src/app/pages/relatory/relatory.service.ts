@@ -85,7 +85,8 @@ export class RelatoryService {
 
     constructor(private http: HttpClient) { }
 
-    postAdHoc(dto: AdHocDTO): Observable<any> {
-        return this.http.post(`${this.apiUrl}/ad-hoc`, dto, this.httpOptions);
+    postAdHoc(dto: AdHocDTO, page: number, size: number): Observable<any> {
+        const params = { page: page.toString(), size: size.toString() };
+        return this.http.post(`${this.apiUrl}/ad-hoc`, dto, { ...this.httpOptions, params });
     }
 } 
