@@ -1,6 +1,6 @@
-package com.purplebox.backend.repository;
+package com.magicbox.backend.repository;
 
-import com.purplebox.backend.model.entity.*;
+import com.magicbox.backend.model.entity.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,9 +1,9 @@
-package com.purplebox.backend.controller;
+package com.magicbox.backend.controller;
 
-import com.purplebox.backend.model.dto.AdHocDTO;
-import com.purplebox.backend.model.dto.TopMusicaDTO;
-import com.purplebox.backend.service.RelatorioService;
-import com.purplebox.backend.service.AdHocService;
+import com.magicbox.backend.model.dto.AdHocDTO;
+import com.magicbox.backend.model.dto.TopMusicaDTO;
+import com.magicbox.backend.service.RelatorioService;
+import com.magicbox.backend.service.AdHocService;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

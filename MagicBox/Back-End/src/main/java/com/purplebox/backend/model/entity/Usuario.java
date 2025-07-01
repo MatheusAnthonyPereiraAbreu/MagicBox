@@ -1,6 +1,6 @@
-package com.purplebox.backend.model.entity;
+package com.magicbox.backend.model.entity;
 
-import com.purplebox.backend.model.dto.Selectable;
+import com.magicbox.backend.model.dto.Selectable;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

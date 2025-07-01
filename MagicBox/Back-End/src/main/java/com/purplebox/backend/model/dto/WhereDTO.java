@@ -1,10 +1,10 @@
-package com.purplebox.backend.model.dto;
+package com.magicbox.backend.model.dto;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.purplebox.backend.mapper.WhereDeserializer;
-import com.purplebox.backend.model.dto.select.Select;
-import com.purplebox.backend.model.dto.table.Table;
-import com.purplebox.backend.model.dto.where.Operator;
+import com.magicbox.backend.mapper.WhereDeserializer;
+import com.magicbox.backend.model.dto.select.Select;
+import com.magicbox.backend.model.dto.table.Table;
+import com.magicbox.backend.model.dto.where.Operator;
 
 @JsonDeserialize(using = WhereDeserializer.class)
 public record WhereDTO(

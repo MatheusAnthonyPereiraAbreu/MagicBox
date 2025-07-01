@@ -1,4 +1,4 @@
-package com.purplebox.backend.model.dto.select;
+package com.magicbox.backend.model.dto.select;
 
 public enum RankingAtualMusicasPaisesSelect implements Select {
     MUSICA_ID("musica.id", Integer.class),

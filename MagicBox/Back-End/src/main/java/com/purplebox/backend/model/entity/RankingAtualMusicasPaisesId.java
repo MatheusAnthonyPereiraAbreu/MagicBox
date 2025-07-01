@@ -1,4 +1,4 @@
-package com.purplebox.backend.model.entity;
+package com.magicbox.backend.model.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

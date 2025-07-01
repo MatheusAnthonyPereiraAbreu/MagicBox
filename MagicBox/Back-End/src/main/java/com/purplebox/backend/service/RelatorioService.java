@@ -1,7 +1,7 @@
-package com.purplebox.backend.service;
+package com.magicbox.backend.service;
 
-import com.purplebox.backend.model.dto.TopMusicaDTO;
-import com.purplebox.backend.repository.RelatorioRepository;
+import com.magicbox.backend.model.dto.TopMusicaDTO;
+import com.magicbox.backend.repository.RelatorioRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

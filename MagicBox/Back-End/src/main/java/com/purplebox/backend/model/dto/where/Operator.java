@@ -1,4 +1,4 @@
-package com.purplebox.backend.model.dto.where;
+package com.magicbox.backend.model.dto.where;
 
 public enum Operator {
     EQUALS,

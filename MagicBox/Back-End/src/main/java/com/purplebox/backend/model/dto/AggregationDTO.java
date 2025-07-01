@@ -1,10 +1,10 @@
-package com.purplebox.backend.model.dto;
+package com.magicbox.backend.model.dto;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.purplebox.backend.mapper.AggregationDeserializer;
-import com.purplebox.backend.model.dto.aggregation.Aggregation;
-import com.purplebox.backend.model.dto.select.Select;
-import com.purplebox.backend.model.dto.table.Table;
+import com.magicbox.backend.mapper.AggregationDeserializer;
+import com.magicbox.backend.model.dto.aggregation.Aggregation;
+import com.magicbox.backend.model.dto.select.Select;
+import com.magicbox.backend.model.dto.table.Table;
 
 @JsonDeserialize(using = AggregationDeserializer.class)
 public record AggregationDTO(

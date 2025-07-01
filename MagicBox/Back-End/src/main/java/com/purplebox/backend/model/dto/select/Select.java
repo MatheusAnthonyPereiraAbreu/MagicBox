@@ -1,6 +1,6 @@
-package com.purplebox.backend.model.dto.select;
+package com.magicbox.backend.model.dto.select;
 
-import com.purplebox.backend.model.dto.table.Table;
+import com.magicbox.backend.model.dto.table.Table;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

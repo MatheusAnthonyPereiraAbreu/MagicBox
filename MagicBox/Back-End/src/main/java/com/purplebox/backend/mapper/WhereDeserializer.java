@@ -1,4 +1,4 @@
-package com.purplebox.backend.mapper;
+package com.magicbox.backend.mapper;
 
 import java.io.IOException;
 
@@ -6,10 +6,10 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.purplebox.backend.model.dto.WhereDTO;
-import com.purplebox.backend.model.dto.select.Select;
-import com.purplebox.backend.model.dto.table.Table;
-import com.purplebox.backend.model.dto.where.Operator;
+import com.magicbox.backend.model.dto.WhereDTO;
+import com.magicbox.backend.model.dto.select.Select;
+import com.magicbox.backend.model.dto.table.Table;
+import com.magicbox.backend.model.dto.where.Operator;
 
 public class WhereDeserializer extends GenericDeserializer<WhereDTO> {
 

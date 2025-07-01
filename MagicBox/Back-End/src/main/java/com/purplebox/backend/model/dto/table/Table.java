@@ -1,7 +1,7 @@
-package com.purplebox.backend.model.dto.table;
+package com.magicbox.backend.model.dto.table;
 
-import com.purplebox.backend.model.entity.*;
-import com.purplebox.backend.model.dto.Selectable;
+import com.magicbox.backend.model.entity.*;
+import com.magicbox.backend.model.dto.Selectable;
 
 public enum Table {
 

@@ -1,9 +1,9 @@
-package com.purplebox.backend.model.dto;
+package com.magicbox.backend.model.dto;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.purplebox.backend.mapper.ColumnDeserializer;
-import com.purplebox.backend.model.dto.select.Select;
-import com.purplebox.backend.model.dto.table.Table;
+import com.magicbox.backend.mapper.ColumnDeserializer;
+import com.magicbox.backend.model.dto.select.Select;
+import com.magicbox.backend.model.dto.table.Table;
 
 @JsonDeserialize(using = ColumnDeserializer.class)
 public record ColumnDTO(

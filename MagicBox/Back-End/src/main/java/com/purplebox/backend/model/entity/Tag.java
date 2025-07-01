@@ -1,4 +1,4 @@
-package com.purplebox.backend.model.entity;
+package com.magicbox.backend.model.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,7 @@ import lombok.Builder;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.purplebox.backend.model.dto.Selectable;
+import com.magicbox.backend.model.dto.Selectable;
 
 @Getter
 @Setter

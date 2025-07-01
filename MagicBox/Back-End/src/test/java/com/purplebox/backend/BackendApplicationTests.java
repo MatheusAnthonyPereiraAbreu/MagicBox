@@ -1,4 +1,4 @@
-package com.purplebox.backend;
+package com.magicbox.backend;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

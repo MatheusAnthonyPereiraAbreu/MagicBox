@@ -1,4 +1,4 @@
-package com.purplebox.backend.model.dto.aggregation;
+package com.magicbox.backend.model.dto.aggregation;
 
 public enum Aggregation {
     COUNT,

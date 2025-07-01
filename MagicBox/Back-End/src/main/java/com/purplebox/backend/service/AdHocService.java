@@ -1,9 +1,9 @@
-package com.purplebox.backend.service;
+package com.magicbox.backend.service;
 
-import com.purplebox.backend.model.dto.*;
-import com.purplebox.backend.model.dto.select.*;
-import com.purplebox.backend.model.dto.table.Table;
-import com.purplebox.backend.model.dto.where.Operator;
+import com.magicbox.backend.model.dto.*;
+import com.magicbox.backend.model.dto.select.*;
+import com.magicbox.backend.model.dto.table.Table;
+import com.magicbox.backend.model.dto.where.Operator;
 
 import jakarta.persistence.*;
 import org.springframework.stereotype.Service;

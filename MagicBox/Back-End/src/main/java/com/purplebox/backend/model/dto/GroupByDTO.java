@@ -1,4 +1,4 @@
-package com.purplebox.backend.model.dto;
+package com.magicbox.backend.model.dto;
 
 import java.util.Set;
 

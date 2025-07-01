@@ -1,10 +1,10 @@
-package com.purplebox.backend.mapper;
+package com.magicbox.backend.mapper;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.purplebox.backend.model.dto.select.*;
-import com.purplebox.backend.model.dto.table.Table;
+import com.magicbox.backend.model.dto.select.*;
+import com.magicbox.backend.model.dto.table.Table;
 
 import java.io.IOException;
 

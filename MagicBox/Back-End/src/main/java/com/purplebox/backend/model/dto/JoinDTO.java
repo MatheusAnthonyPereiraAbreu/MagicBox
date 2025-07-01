@@ -1,6 +1,6 @@
-package com.purplebox.backend.model.dto;
+package com.magicbox.backend.model.dto;
 
-import com.purplebox.backend.model.dto.table.Table;
+import com.magicbox.backend.model.dto.table.Table;
 
 import jakarta.persistence.criteria.JoinType;
 

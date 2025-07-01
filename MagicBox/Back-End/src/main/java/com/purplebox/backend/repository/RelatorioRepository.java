@@ -1,6 +1,6 @@
-package com.purplebox.backend.repository;
+package com.magicbox.backend.repository;
 
-import com.purplebox.backend.model.dto.TopMusicaDTO;
+import com.magicbox.backend.model.dto.TopMusicaDTO;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
